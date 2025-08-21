@@ -1,7 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://zjxksrybibrxqlobnuyb.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqeGtzcnliaWJyeHFsb2JudXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODY5NzIsImV4cCI6MjA3MTM2Mjk3Mn0.z2YAPYM2yPOC2MDs21CiCAYreJiQonW38UGmsWZbZms'
+// Use environment variables if available, fallback to hardcoded values
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://zjxksrybibrxqlobnuyb.supabase.co'
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqeGtzcnliaWJyeHFsb2JudXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODY5NzIsImV4cCI6MjA3MTM2Mjk3Mn0.z2YAPYM2yPOC2MDs21CiCAYreJiQonW38UGmsWZbZms'
+
+// Get the current domain for redirect URLs
+const getRedirectUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  // Fallback for SSR
+  return 'https://www.h2jaan.online'
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -10,7 +20,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: 'pkce'
+    flowType: 'pkce',
+    // Add redirect URLs for OAuth
+    redirectTo: getRedirectUrl()
   }
 })
 
