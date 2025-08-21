@@ -21,73 +21,73 @@ import {
 const quizQuestions = [
   {
     id: 1,
-    question: "What is Ali's absolute favorite game?",
-    options: ["Valorant", "SMITE 2", "Rocket League", "CS:GO"],
-    correct: 1,
-    explanation: "SMITE 2 is Ali's gaming obsession and absolute favorite!"
+    question: "ايش هي اكلتي المفضلة ؟",
+    options: ["منسف", "مسخن", "ملوخية", "مقلوبة"],
+    correct: 0,
+    explanation: "منسف هي اكلتي المفضلة!"
   },
   {
     id: 2,
-    question: "What is Ali's main expertise besides gaming?",
-    options: ["Audio Engineering", "Graphic Design", "Video Editing", "3D Modeling"],
+    question: "ايش هو لوني المفضل",
+    options: ["اسود", "ازرق", "بنفسجي", "احمر"],
     correct: 0,
-    explanation: "Ali is a professional Audio Engineer specializing in sound production!"
+    explanation: "اللون الاسود هو لوني المفضل!"
   },
   {
     id: 3,
-    question: "Which role does Ali prefer in SMITE 2?",
-    options: ["Support", "Jungle & ADC", "Solo Lane", "Mid Lane"],
+    question: "ايش اكثر اغنية عملتها بحبها",
+    options: ["شايف", "لما", "تايه", "لسا"],
     correct: 1,
-    explanation: "Ali mains Jungle and ADC roles with aggressive strategic gameplay!"
+    explanation: "اغنية 'لما' هي اكثر اغنية عملتها بحبها!"
   },
   {
     id: 4,
-    question: "What programming language does Ali excel at?",
-    options: ["Python", "JavaScript", "C++", "Java"],
-    correct: 1,
-    explanation: "Ali has 92% proficiency in JavaScript and builds React applications!"
+    question: "ايش تخصصي الجامعي ؟",
+    options: ["علم حاسوب", "هندسة كهربائية", "هندسة ميكانيكية", "هندسة مدنية"],
+    correct: 0,
+    explanation: "تخصصي هو علم حاسوب!"
   },
   {
     id: 5,
-    question: "What's Ali's preferred development tool?",
-    options: ["Sublime Text", "Atom", "VS Code", "IntelliJ"],
-    correct: 2,
-    explanation: "Ali uses VS Code with 95% proficiency for development!"
+    question: "اكثر اشي بحب اعمله",
+    options: ["اسوي راب", "ابرمج", "ادرس", "قيمنق"],
+    correct: 1,
+    explanation: "اكثر اشي بحب اعمله هو البرمجة!"
   },
   {
     id: 6,
-    question: "Which audio software does Ali master the most?",
-    options: ["Pro Tools", "FL Studio", "GarageBand", "Audacity"],
-    correct: 0,
-    explanation: "Ali has 95% proficiency in Pro Tools for professional audio production!"
+    question: "كم عمري",
+    options: ["21", "23", "25", "22"],
+    correct: 3,
+    explanation: "عمري 22 سنة!"
   },
   {
     id: 7,
-    question: "What's Ali's Discord username?",
-    options: ["AliAudio", "h2jo", "AliDev", "SmiteKing"],
-    correct: 1,
-    explanation: "You can find Ali on Discord as 'h2jo' for gaming and collaboration!"
+    question: "مشروبي المفضل",
+    options: ["فراولة ميلك شيك", "قهوة", "اوريو ميلك شيك", "شاي"],
+    correct: 2,
+    explanation: "اوريو ميلك شيك هو مشروبي المفضل!"
   },
   {
     id: 8,
-    question: "What type of authentication does Ali implement?",
-    options: ["JWT only", "Sessions", "OAuth (Google/GitHub)", "Basic Auth"],
-    correct: 2,
-    explanation: "Ali implements modern OAuth authentication with Google and GitHub!"
+    question: "أفضل لعبة عندي؟",
+    options: ["فالورانت", "فورنتايت", "اوفرواتش", "سمايت 2"],
+    correct: 3,
+    explanation: "سمايت 2 هي افضل لعبة عندي!"
   },
   {
     id: 9,
-    question: "What's Ali's approach to gaming?",
-    options: ["Casual Fun", "Aggressive & Strategic", "Support Player", "Solo Only"],
-    correct: 1,
-    explanation: "Ali brings aggressive and strategic gameplay to all his games!"
+    question: "الاكلة اللي مستحيل واكلها؟",
+    options: ["كبسة", "اوزة", "بازيلاء", "مقلوبة"],
+    correct: 2,
+    explanation: "البازيلاء هي الاكلة اللي مستحيل ااكلها!"
   },
   {
     id: 10,
-    question: "What does Ali specialize in for live events?",
-    options: ["Lighting", "Live Sound Engineering", "Video Production", "Stage Design"],
-    correct: 1,
-    explanation: "Ali is a specialist in live sound engineering for events and concerts!"
+    question: "الصيف ولا الشتاء؟",
+    options: ["الصيف", "الشتاء"],
+    correct: 0,
+    explanation: "الصيف هو الموسم المفضل عندي!"
   }
 ]
 

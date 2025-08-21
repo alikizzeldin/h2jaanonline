@@ -13,7 +13,8 @@ import {
   Terminal,
   Layers,
   Zap,
-  Settings
+  Settings,
+  Users
 } from 'lucide-react'
 
 export default function Skills() {
@@ -52,12 +53,12 @@ export default function Skills() {
       icon: <Headphones className="w-8 h-8" />,
       color: "from-purple-500 to-pink-500",
       skills: [
-        { name: "Pro Tools", level: 95 },
-        { name: "Logic Pro X", level: 90 },
-        { name: "Ableton Live", level: 88 },
-        { name: "Cubase", level: 85 },
-        { name: "Reaper", level: 80 },
-        { name: "Adobe Audition", level: 85 }
+        { name: "Voice Over & Recording", level: 95 },
+        { name: "Mixing & Mastering", level: 92 },
+        { name: "Sound Design", level: 88 },
+        { name: "FL Studio", level: 90 },
+        { name: "Plugin Development", level: 85 },
+        { name: "Live Sound Engineering", level: 87 }
       ]
     },
     {
@@ -74,16 +75,16 @@ export default function Skills() {
       ]
     },
     {
-      title: "Audio Hardware",
-      icon: <Mic className="w-8 h-8" />,
+      title: "Social & Communication",
+      icon: <Users className="w-8 h-8" />,
       color: "from-green-500 to-emerald-500",
       skills: [
-        { name: "Mixing Consoles", level: 95 },
-        { name: "Microphones", level: 90 },
-        { name: "Studio Monitors", level: 88 },
-        { name: "Audio Interfaces", level: 85 },
-        { name: "Outboard Gear", level: 82 },
-        { name: "Live Sound Systems", level: 80 }
+        { name: "Fast Typing (120+ WPM)", level: 95 },
+        { name: "Public Speaking", level: 90 },
+        { name: "Team Leadership", level: 88 },
+        { name: "Customer Service", level: 85 },
+        { name: "Event Management", level: 82 },
+        { name: "Cross-cultural Communication", level: 80 }
       ]
     },
     {
