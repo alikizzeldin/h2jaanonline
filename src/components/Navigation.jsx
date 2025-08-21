@@ -10,8 +10,7 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [userProfile, setUserProfile] = useState(null)
-  const { user, signOut, loading } = useAuth()
+  const { user, signOut, loading, userProfile } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -24,68 +23,15 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Fetch user profile data
+  // Debug auth state
   useEffect(() => {
-    if (user) {
-      fetchUserProfile()
-      
-      // Set up real-time subscription for profile changes
-      const subscription = supabase
-        .channel('profile_changes')
-        .on('postgres_changes', 
-          { 
-            event: '*', 
-            schema: 'public', 
-            table: 'profiles',
-            filter: `id=eq.${user.id}`
-          },
-          (payload) => {
-            if (payload.new) {
-              setUserProfile(payload.new)
-            }
-          }
-        )
-        .subscribe()
-
-      return () => {
-        subscription.unsubscribe()
-      }
-    }
-  }, [user])
-
-  const fetchUserProfile = async () => {
-    if (!user) return
-    
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username, full_name')
-        .eq('id', user.id)
-        .single()
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching profile:', error)
-        return
-      }
-
-      if (data) {
-        setUserProfile(data)
-      } else {
-        // Fallback to user metadata if no profile exists
-        setUserProfile({
-          username: user.user_metadata?.user_name || user.email?.split('@')[0] || '',
-          full_name: user.user_metadata?.full_name || ''
-        })
-      }
-    } catch (error) {
-      console.error('Error fetching user profile:', error)
-      // Fallback to user metadata
-      setUserProfile({
-        username: user.user_metadata?.user_name || user.email?.split('@')[0] || '',
-        full_name: user.user_metadata?.full_name || ''
-      })
-    }
-  }
+    console.log('Navigation - Auth state:', { 
+      user: !!user, 
+      loading, 
+      userEmail: user?.email,
+      hasProfile: !!userProfile
+    })
+  }, [user, loading, userProfile])
 
   const handleSignOut = async () => {
     await signOut()
@@ -223,6 +169,13 @@ export default function Navigation() {
                     </motion.button>
                   </Link>
                 )}
+              </div>
+            )}
+
+            {/* Loading indicator */}
+            {loading && (
+              <div className="ml-6">
+                <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
               </div>
             )}
           </div>

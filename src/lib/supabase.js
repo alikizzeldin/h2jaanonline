@@ -13,3 +13,46 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     flowType: 'pkce'
   }
 })
+
+// Test Supabase connectivity
+export const testSupabaseConnection = async () => {
+  try {
+    console.log('Testing Supabase connectivity...')
+    
+    // Test 1: Basic connection
+    const startTime = Date.now()
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('count')
+      .limit(1)
+    
+    const endTime = Date.now()
+    const responseTime = endTime - startTime
+    
+    if (error) {
+      console.error('Supabase connection test failed:', error)
+      return {
+        success: false,
+        error: error.message,
+        responseTime
+      }
+    }
+    
+    console.log('Supabase connection test successful:', {
+      responseTime: `${responseTime}ms`,
+      data
+    })
+    
+    return {
+      success: true,
+      responseTime,
+      data
+    }
+  } catch (error) {
+    console.error('Supabase connection test error:', error)
+    return {
+      success: false,
+      error: error.message
+    }
+  }
+}

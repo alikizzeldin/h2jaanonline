@@ -9,32 +9,20 @@ export default function BackgroundMusic() {
   const [playbackRate, setPlaybackRate] = useState(1)
   const [showControls, setShowControls] = useState(true)
   const [showVolumePanel, setShowVolumePanel] = useState(false)
+  const [hasUserInteracted, setHasUserInteracted] = useState(false)
   const audioRef = useRef(null)
   const volumeTimeoutRef = useRef(null)
 
   useEffect(() => {
-    // Auto-play when component mounts (with user interaction consideration)
-    const playAudio = async () => {
-      if (audioRef.current) {
-        try {
-          await audioRef.current.play()
-          setIsPlaying(true)
-        } catch (error) {
-          console.log('Auto-play prevented by browser:', error)
-          // Show controls if auto-play fails
-          setShowControls(true)
-        }
-      }
-    }
-
-    // Small delay to ensure component is mounted
-    const timer = setTimeout(playAudio, 1000)
-    return () => clearTimeout(timer)
+    // Don't auto-play - wait for user interaction
+    // This prevents browser autoplay restrictions and potential auth interference
+    console.log('BackgroundMusic mounted - waiting for user interaction')
   }, [])
 
   const toggleMute = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    setHasUserInteracted(true)
     if (audioRef.current) {
       const newMutedState = !isMuted
       audioRef.current.muted = newMutedState
@@ -45,6 +33,8 @@ export default function BackgroundMusic() {
   const togglePlay = async (e) => {
     e.preventDefault()
     e.stopPropagation()
+    setHasUserInteracted(true)
+    
     if (audioRef.current) {
       try {
         if (isPlaying) {
@@ -68,6 +58,7 @@ export default function BackgroundMusic() {
   }
 
   const handleVolumeChange = (newVolume) => {
+    setHasUserInteracted(true)
     // Immediate state updates for instant UI feedback
     setVolume(newVolume)
     
@@ -87,6 +78,7 @@ export default function BackgroundMusic() {
   }
 
   const handlePlaybackRateChange = (rate) => {
+    setHasUserInteracted(true)
     setPlaybackRate(rate)
     if (audioRef.current) {
       audioRef.current.playbackRate = rate
