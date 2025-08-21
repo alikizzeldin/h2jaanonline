@@ -1,0 +1,46 @@
+[33mcommit 68ec78329e996751114f0b515316b06559818ac4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: unknown <alikizzeldin@gmail.com>
+Date:   Thu Aug 21 20:17:47 2025 +0300
+
+    Initial commit: Complete React portfolio website with Supabase authentication
+
+.gitignore
+README.md
+add-medals-to-existing-profiles.sql
+assets/COD.png
+assets/MR.png
+assets/cs2.png
+assets/h2jaan_shayef.mp3
+assets/rocketleauge.png
+assets/smite2.jpg
+assets/valorant.jpg
+fix-signup-trigger.sql
+index.html
+package-lock.json
+package.json
+postcss.config.js
+src/App.jsx
+src/components/About.jsx
+src/components/AnimatedBackground.jsx
+src/components/BackgroundMusic.jsx
+src/components/Contact.jsx
+src/components/Gaming.jsx
+src/components/Hero.jsx
+src/components/LetterAvatar.jsx
+src/components/Navigation.jsx
+src/components/ProfileSetupRedirect.jsx
+src/components/Skills.jsx
+src/contexts/AuthContext.jsx
+src/index.css
+src/lib/supabase.js
+src/main.jsx
+src/pages/Friends.jsx
+src/pages/Home.jsx
+src/pages/Login.jsx
+src/pages/Profile.jsx
+src/pages/ProfileSetup.jsx
+src/pages/Signup.jsx
+supabase-profiles-table.sql
+tailwind.config.js
+vite.config.js
+youtube-audio-extraction-guide.md
