@@ -17,60 +17,55 @@ export const AuthProvider = ({ children }) => {
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false)
 
   useEffect(() => {
-    // Get initial session with better error handling
-    const getSession = async () => {
+    let mounted = true
+
+    // Get initial session
+    const getInitialSession = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
         
         if (error) {
-          console.error('Session error:', error)
-          // Clear invalid session
-          await supabase.auth.signOut()
-          setUser(null)
-          setNeedsProfileSetup(false)
-          setLoading(false)
-          return
-        }
-
-        if (session?.user) {
-          // Validate session is not expired
-          const now = Math.floor(Date.now() / 1000)
-          if (session.expires_at && session.expires_at < now) {
-            console.log('Session expired, clearing...')
-            await supabase.auth.signOut()
+          console.error('Error getting initial session:', error)
+          if (mounted) {
             setUser(null)
             setNeedsProfileSetup(false)
             setLoading(false)
-            return
           }
+          return
+        }
 
+        if (session?.user && mounted) {
           setUser(session.user)
           await ensureProfileExists(session.user)
           await checkProfileSetupNeeded(session.user)
-        } else {
+        } else if (mounted) {
           setUser(null)
           setNeedsProfileSetup(false)
         }
         
-        setLoading(false)
+        if (mounted) {
+          setLoading(false)
+        }
       } catch (error) {
-        console.error('Auth initialization error:', error)
-        // Clear everything on error
-        await supabase.auth.signOut()
-        setUser(null)
-        setNeedsProfileSetup(false)
-        setLoading(false)
+        console.error('Error in getInitialSession:', error)
+        if (mounted) {
+          setUser(null)
+          setNeedsProfileSetup(false)
+          setLoading(false)
+        }
       }
     }
 
-    getSession()
+    getInitialSession()
 
-    // Listen for auth changes with better error handling
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change:', event, !!session)
+        
+        if (!mounted) return
+
         try {
-          console.log('Auth state change:', event, !!session)
-          
           if (event === 'SIGNED_OUT' || !session) {
             setUser(null)
             setNeedsProfileSetup(false)
@@ -78,25 +73,14 @@ export const AuthProvider = ({ children }) => {
             return
           }
 
-          if (event === 'TOKEN_REFRESHED' && session) {
-            // Validate refreshed session
-            const now = Math.floor(Date.now() / 1000)
-            if (session.expires_at && session.expires_at < now) {
-              console.log('Refreshed session still expired, signing out...')
-              await supabase.auth.signOut()
-              return
-            }
-          }
-
-          const newUser = session?.user ?? null
-          if (newUser) {
-            setUser(newUser)
+          if (session?.user) {
+            setUser(session.user)
             
-            // Only ensure profile exists for new sign ins or token refresh
-            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-              await ensureProfileExists(newUser)
+            // Only ensure profile exists for new sign ins
+            if (event === 'SIGNED_IN') {
+              await ensureProfileExists(session.user)
             }
-            await checkProfileSetupNeeded(newUser)
+            await checkProfileSetupNeeded(session.user)
           } else {
             setUser(null)
             setNeedsProfileSetup(false)
@@ -104,43 +88,20 @@ export const AuthProvider = ({ children }) => {
           
           setLoading(false)
         } catch (error) {
-          console.error('Auth state change error:', error)
-          // Clear everything on error
-          await supabase.auth.signOut()
-          setUser(null)
-          setNeedsProfileSetup(false)
-          setLoading(false)
+          console.error('Error in auth state change:', error)
+          if (mounted) {
+            setUser(null)
+            setNeedsProfileSetup(false)
+            setLoading(false)
+          }
         }
       }
     )
 
-    return () => subscription?.unsubscribe()
-  }, [])
-
-  // Auto-refresh session every 30 minutes to prevent expiration
-  useEffect(() => {
-    const refreshInterval = setInterval(async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (session) {
-        const now = Math.floor(Date.now() / 1000)
-        const expiresAt = session.expires_at || 0
-        
-        // Refresh if session expires within 5 minutes
-        if (expiresAt - now < 300) {
-          console.log('Auto-refreshing session...')
-          try {
-            await supabase.auth.refreshSession()
-          } catch (error) {
-            console.error('Auto-refresh failed:', error)
-            // If refresh fails, sign out to avoid broken state
-            await supabase.auth.signOut()
-          }
-        }
-      }
-    }, 30 * 60 * 1000) // Check every 30 minutes
-
-    return () => clearInterval(refreshInterval)
+    return () => {
+      mounted = false
+      subscription?.unsubscribe()
+    }
   }, [])
 
   const ensureProfileExists = async (user) => {
@@ -175,7 +136,6 @@ export const AuthProvider = ({ children }) => {
 
         if (insertError) {
           console.error('Error creating profile:', insertError)
-          // Don't fail auth if profile creation fails
         } else {
           console.log('Profile created successfully')
         }
@@ -184,11 +144,12 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error in ensureProfileExists:', error)
-      // Don't fail auth if profile operations fail
     }
   }
 
   const checkProfileSetupNeeded = async (user) => {
+    if (!user) return
+    
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -202,11 +163,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Check if user needs profile setup
-      // They need setup if:
-      // 1. No profile exists in database, OR
-      // 2. Profile exists but username is empty/null
       const needsSetup = !data || !data.username || data.username.trim() === ''
-      
       setNeedsProfileSetup(needsSetup)
     } catch (error) {
       console.error('Error in checkProfileSetupNeeded:', error)
@@ -236,28 +193,15 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     try {
-      // Clear local state first
-      setUser(null)
-      setNeedsProfileSetup(false)
-      
-      // Sign out from Supabase
       const { error } = await supabase.auth.signOut()
       
       if (error) {
         console.error('Sign out error:', error)
-        // Even if signout fails, clear local storage to prevent issues
-        localStorage.removeItem('supabase.auth.token')
-        sessionStorage.clear()
       }
       
       return { error }
     } catch (error) {
       console.error('Sign out failed:', error)
-      // Force clear everything
-      setUser(null)
-      setNeedsProfileSetup(false)
-      localStorage.removeItem('supabase.auth.token')
-      sessionStorage.clear()
       return { error }
     }
   }
