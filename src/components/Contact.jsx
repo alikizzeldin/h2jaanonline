@@ -26,11 +26,12 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
+  const [isAnonymous, setIsAnonymous] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!senderName.trim()) {
+    if (!senderName.trim() && !isAnonymous) {
       setError('Please enter your name')
       return
     }
@@ -49,7 +50,7 @@ export default function Contact() {
         .from('messages')
         .insert([
           {
-            sender_name: senderName.trim(),
+            sender_name: isAnonymous ? 'Anonymous' : senderName.trim(),
             message: message.trim(),
             created_at: new Date().toISOString()
           }
@@ -62,12 +63,18 @@ export default function Contact() {
       setSuccess('Message sent successfully!')
       setSenderName('')
       setMessage('')
+      setIsAnonymous(false)
     } catch (error) {
       console.error('Error sending message:', error)
       setError('Failed to send message. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleAnonymousSend = () => {
+    setIsAnonymous(true)
+    setSenderName('')
   }
 
   const containerVariants = {
@@ -253,11 +260,22 @@ export default function Contact() {
                          type="text"
                          value={senderName}
                          onChange={(e) => setSenderName(e.target.value)}
-                         className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                         placeholder="Enter your name"
-                         required
+                         className={`w-full pl-10 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 ${
+                           isAnonymous 
+                             ? 'border-green-500/50 bg-green-500/10' 
+                             : 'border-white/10 focus:border-primary/50'
+                         }`}
+                         placeholder={isAnonymous ? 'Anonymous' : "Enter your name"}
+                         disabled={isAnonymous}
+                         required={!isAnonymous}
                        />
                      </div>
+                     {isAnonymous && (
+                       <p className="text-green-400 text-sm mt-1 flex items-center">
+                         <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                         Message will be sent anonymously
+                       </p>
+                     )}
                    </div>
                    
                    <div>
@@ -277,16 +295,33 @@ export default function Contact() {
                      </div>
                    </div>
                   
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    disabled={loading}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group disabled:opacity-50"
-                  >
-                    <Send className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    {loading ? 'Sending...' : 'Send Message'}
-                  </motion.button>
+                                     <div className="flex space-x-3">
+                     <motion.button
+                       whileHover={{ scale: 1.02 }}
+                       whileTap={{ scale: 0.98 }}
+                       type="submit"
+                       disabled={loading}
+                       className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group disabled:opacity-50"
+                     >
+                       <Send className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                       {loading ? 'Sending...' : 'Send Message'}
+                     </motion.button>
+                     
+                     <motion.button
+                       whileHover={{ scale: 1.02 }}
+                       whileTap={{ scale: 0.98 }}
+                       type="button"
+                       onClick={handleAnonymousSend}
+                       disabled={loading || isAnonymous}
+                       className={`px-4 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group disabled:opacity-50 ${
+                         isAnonymous 
+                           ? 'bg-green-500/20 border border-green-500/50 text-green-400' 
+                           : 'bg-gray-600/20 border border-gray-500/50 text-gray-300 hover:bg-gray-600/30'
+                       }`}
+                     >
+                       <span className="text-sm">Anonymous</span>
+                     </motion.button>
+                   </div>
                 </form>
               </div>
             </motion.div>
