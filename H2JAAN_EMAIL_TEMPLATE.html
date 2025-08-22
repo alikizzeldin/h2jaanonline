@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Welcome to H2jaan Online!</title>
+    <style>
+        /* Reset and base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: #e2e8f0; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+        }
+        
+        /* Container */
+        .email-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Header with gaming theme */
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); 
+            color: white; 
+            padding: 40px 30px; 
+            text-align: center; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header h1 { 
+            font-size: 2.5em; 
+            font-weight: 800; 
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p { 
+            font-size: 1.2em; 
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Gaming icons */
+        .gaming-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .gaming-icon {
+            font-size: 2em;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .gaming-icon:nth-child(2) { animation-delay: 0.5s; }
+        .gaming-icon:nth-child(3) { animation-delay: 1s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Content area */
+        .content { 
+            padding: 40px 30px; 
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-section h2 { 
+            font-size: 2em; 
+            color: #fbbf24; 
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+        
+        .welcome-section p { 
+            font-size: 1.1em; 
+            color: #cbd5e1; 
+            margin-bottom: 20px;
+        }
+        
+        /* Confirmation button */
+        .confirm-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .confirm-button { 
+            display: inline-block; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 18px 40px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 1.1em;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .confirm-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .confirm-button:hover::before {
+            left: 100%;
+        }
+        
+        .confirm-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        /* Features section */
+        .features {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .features h3 {
+            color: #fbbf24;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            list-style: none;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 1.2em;
+            color: #fbbf24;
+        }
+        
+        /* Footer */
+        .footer { 
+            text-align: center; 
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer p { 
+            color: #94a3b8; 
+            font-size: 0.9em; 
+            margin: 5px 0;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .email-container { margin: 10px; }
+            .header h1 { font-size: 2em; }
+            .content { padding: 20px; }
+            .feature-list { grid-template-columns: 1fr; }
+        }
+        
+        /* Glow effects */
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #667eea, 0 0 10px #667eea, 0 0 15px #667eea; }
+            to { text-shadow: 0 0 10px #667eea, 0 0 20px #667eea, 0 0 30px #667eea; }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="gaming-icons">
+                <span class="gaming-icon">🎮</span>
+                <span class="gaming-icon">🏆</span>
+                <span class="gaming-icon">⚡</span>
+            </div>
+            <h1>H2jaan Online</h1>
+            <p>Your Ultimate Gaming Portfolio & Community</p>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2 class="glow">🎯 Level Up Your Gaming Journey!</h2>
+                <p>Hey there, future gaming legend! 👋</p>
+                <p>Welcome to <strong>H2jaan Online</strong> - where your gaming achievements become legendary stories. You're just one step away from joining an epic community of gamers!</p>
+            </div>
+            
+            <!-- Confirmation Section -->
+            <div class="confirm-section">
+                <h3>🚀 Ready to Start Your Adventure?</h3>
+                <p>Click the button below to confirm your account and unlock your gaming portfolio:</p>
+                
+                <a href="{{ .ConfirmationURL }}" class="confirm-button">
+                    🎮 CONFIRM MY ACCOUNT
+                </a>
+                
+                <p style="font-size: 0.9em; color: #94a3b8; margin-top: 15px;">
+                    <em>This link will expire in 24 hours for your security</em>
+                </p>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="features">
+                <h3>🌟 What Awaits You</h3>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="feature-icon">🎯</span>
+                        <span>Track Your Gaming Achievements</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">👥</span>
+                        <span>Connect with Fellow Gamers</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">🏆</span>
+                        <span>Showcase Your Skills</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <span>Real-time Gaming Stats</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">🎨</span>
+                        <span>Custom Gaming Profile</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">🔥</span>
+                        <span>Join Gaming Challenges</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Security Note -->
+            <div style="text-align: center; margin: 30px 0; padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                <p style="color: #fca5a5; font-size: 0.9em;">
+                    <strong>🔒 Security Notice:</strong> If you didn't create an account with H2jaan Online, please ignore this email. Your account security is our top priority.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer Section -->
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://www.h2jaan.online">🌐 Visit Website</a>
+                <a href="https://github.com/alikizzeldin">📱 GitHub</a>
+                <a href="mailto:contact@h2jaan.online">📧 Contact</a>
+            </div>
+            <p>© 2024 H2jaan Online. All rights reserved.</p>
+            <p>This email was sent to <strong>{{ .Email }}</strong></p>
+            <p style="font-size: 0.8em; color: #64748b;">
+                🎮 Level up your gaming experience with H2jaan Online
+            </p>
+        </div>
+    </div>
+</body>
+</html>

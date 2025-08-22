@@ -1,0 +1,37 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main circle background -->
+  <circle cx="32" cy="32" r="30" fill="url(#logoGradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- H2 text -->
+  <text x="32" y="28" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">H2</text>
+  
+  <!-- Gaming controller icon -->
+  <g transform="translate(32, 40)">
+    <!-- Controller body -->
+    <rect x="-8" y="-2" width="16" height="8" rx="4" fill="white" opacity="0.9"/>
+    
+    <!-- Left button -->
+    <circle cx="-4" cy="2" r="1.5" fill="#667eea"/>
+    
+    <!-- Right button -->
+    <circle cx="4" cy="2" r="1.5" fill="#f093fb"/>
+    
+    <!-- Center button -->
+    <circle cx="0" cy="2" r="1" fill="#764ba2"/>
+  </g>
+  
+  <!-- Glow effect -->
+  <circle cx="32" cy="32" r="32" fill="none" stroke="url(#logoGradient)" stroke-width="1" opacity="0.3">
+    <animate attributeName="r" values="32;35;32" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>

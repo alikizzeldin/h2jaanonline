@@ -1,0 +1,38 @@
+🎮 H2jaan Online - Your Ultimate Gaming Portfolio & Community
+================================================================
+
+🎯 Level Up Your Gaming Journey!
+
+Hey there, future gaming legend! 👋
+
+Welcome to H2jaan Online - where your gaming achievements become legendary stories. You're just one step away from joining an epic community of gamers!
+
+🚀 Ready to Start Your Adventure?
+
+Click the link below to confirm your account and unlock your gaming portfolio:
+
+🎮 CONFIRM MY ACCOUNT: {{ .ConfirmationURL }}
+
+This link will expire in 24 hours for your security.
+
+🌟 What Awaits You
+
+✅ Track Your Gaming Achievements
+👥 Connect with Fellow Gamers  
+🏆 Showcase Your Skills
+⚡ Real-time Gaming Stats
+🎨 Custom Gaming Profile
+🔥 Join Gaming Challenges
+
+🔒 Security Notice: If you didn't create an account with H2jaan Online, please ignore this email. Your account security is our top priority.
+
+================================================================
+
+🌐 Visit Website: https://www.h2jaan.online
+📱 GitHub: https://github.com/alikizzeldin
+📧 Contact: contact@h2jaan.online
+
+© 2024 H2jaan Online. All rights reserved.
+This email was sent to {{ .Email }}
+
+🎮 Level up your gaming experience with H2jaan Online

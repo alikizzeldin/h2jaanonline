@@ -5,6 +5,7 @@ import { Menu, X, LogIn, LogOut, User, Home, Users } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from './LetterAvatar'
+import Logo from './Logo'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -91,14 +92,7 @@ export default function Navigation() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center"
-              >
-                <span className="text-2xl font-bold text-gradient">
-                  Ali Izzeldin
-                </span>
-              </motion.div>
+              <Logo size="default" />
             </Link>
 
             {/* Desktop Navigation */}

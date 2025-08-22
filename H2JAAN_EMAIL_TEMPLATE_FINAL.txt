@@ -1,0 +1,37 @@
+H2jaan Online - Gaming Portfolio & Community Platform
+====================================================
+
+Welcome to H2jaan Online!
+
+Hello there!
+
+Thank you for joining H2jaan Online - your gaming portfolio and community platform. You're almost ready to start your journey!
+
+Complete Your Registration
+
+To activate your account and access your gaming portfolio, please click the link below:
+
+Activate My Account: {{ .ConfirmationURL }}
+
+This activation link expires in 24 hours.
+
+What You Can Do
+
+- Track Gaming Achievements
+- Connect with Gamers
+- Showcase Your Skills
+- Real-time Statistics
+- Custom Profile
+- Join Challenges
+
+Security Notice: If you didn't create an account with H2jaan Online, you can safely ignore this email.
+
+====================================================
+
+GitHub: https://github.com/alikizzeldin
+Contact: contact@h2jaan.online
+
+© 2024 H2jaan Online. All rights reserved.
+This email was sent to {{ .Email }}
+
+H2jaan Online - Gaming Portfolio Platform
