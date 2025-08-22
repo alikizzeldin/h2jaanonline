@@ -28,11 +28,11 @@ const Logo = ({
 
   const LogoContent = () => (
     <div className={`flex items-center space-x-3 ${className}`}>
-      <img 
-        src="/assets/logos/h2jaan-logo.svg" 
-        alt="H2jaan Online Logo" 
-        className={sizeClasses[size]}
-      />
+             <img 
+         src="/assets/logos/h2jaan-logo.png" 
+         alt="H2jaan Online Logo" 
+         className={sizeClasses[size]}
+       />
       {showText && (
         <div className="flex flex-col">
                      <span className={`font-bold text-gradient ${textSizes[size]}`}>
