@@ -105,39 +105,37 @@ export default function Friends() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      fetchLeaderboard()
-      fetchUserStats()
-      fetchUserProfile()
-      
-      // Set up real-time subscription for profile and leaderboard changes
-      const subscription = supabase
-        .channel('friends_changes')
-        .on('postgres_changes', 
-          { 
-            event: '*', 
-            schema: 'public', 
-            table: 'profiles'
-          },
-          (payload) => {
-            // Refresh leaderboard when any profile changes
-            fetchLeaderboard()
-            
-            // Update current user's profile if it's their change
-            if (payload.new && payload.new.id === user.id) {
-              setUserProfile(payload.new)
-              setUserStats({
-                medals: payload.new.medals || 0,
-                hasPlayedQuiz: payload.new.has_played_quiz || false
-              })
-            }
+    fetchLeaderboard()
+    fetchUserStats()
+    fetchUserProfile()
+    
+    // Set up real-time subscription for profile and leaderboard changes
+    const subscription = supabase
+      .channel('friends_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'profiles'
+        },
+        (payload) => {
+          // Refresh leaderboard when any profile changes
+          fetchLeaderboard()
+          
+          // Update current user's profile if it's their change
+          if (payload.new && payload.new.id === user.id) {
+            setUserProfile(payload.new)
+            setUserStats({
+              medals: payload.new.medals || 0,
+              hasPlayedQuiz: payload.new.has_played_quiz || false
+            })
           }
-        )
-        .subscribe()
+        }
+      )
+      .subscribe()
 
-      return () => {
-        subscription.unsubscribe()
-      }
+    return () => {
+      subscription.unsubscribe()
     }
   }, [user])
 

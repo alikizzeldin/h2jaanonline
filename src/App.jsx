@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './contexts/AuthContext'
 import Navigation from './components/Navigation'
 import ProfileSetupRedirect from './components/ProfileSetupRedirect'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -25,7 +26,11 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile-setup" element={<ProfileSetup />} />
-          <Route path="/friends" element={<Friends />} />
+          <Route path="/friends" element={
+            <ProtectedRoute>
+              <Friends />
+            </ProtectedRoute>
+          } />
         </Routes>
       </div>
     </ProfileSetupRedirect>
