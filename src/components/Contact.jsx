@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { supabase } from '../lib/supabase'
 import { 
   Mail, 
   MessageCircle, 
@@ -19,6 +20,47 @@ export default function Contact() {
     triggerOnce: true,
     threshold: 0.1
   })
+
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    
+    if (!message.trim()) {
+      setError('Please enter a message')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    setSuccess('')
+
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .insert([
+          {
+            message: message.trim(),
+            created_at: new Date().toISOString()
+          }
+        ])
+
+      if (error) {
+        throw error
+      }
+
+      setSuccess('Message sent successfully!')
+      setMessage('')
+    } catch (error) {
+      console.error('Error sending message:', error)
+      setError('Failed to send message. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -180,46 +222,18 @@ export default function Contact() {
             <motion.div variants={itemVariants}>
               <div className="glass p-8 rounded-2xl">
                 <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Name
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                          placeholder="Your Name"
-                        />
-                      </div>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  {error && (
+                    <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400">
+                      {error}
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Email
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="email"
-                          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                          placeholder="your.email@example.com"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  )}
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                      placeholder="What's this about?"
-                    />
-                  </div>
+                  {success && (
+                    <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
+                      {success}
+                    </div>
+                  )}
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -228,9 +242,12 @@ export default function Contact() {
                     <div className="relative">
                       <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                       <textarea
-                        rows="5"
+                        rows="6"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
                         placeholder="Tell me about your project, collaboration idea, or just say hi!"
+                        required
                       ></textarea>
                     </div>
                   </div>
@@ -239,10 +256,11 @@ export default function Contact() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="w-full px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group"
+                    disabled={loading}
+                    className="w-full px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group disabled:opacity-50"
                   >
                     <Send className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    Send Message
+                    {loading ? 'Sending...' : 'Send Message'}
                   </motion.button>
                 </form>
               </div>

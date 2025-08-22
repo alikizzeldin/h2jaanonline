@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [initialized, setInitialized] = useState(false)
   const [hasInitialized, setHasInitialized] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // Helper functions for localStorage
   const getCachedProfile = (userId) => {
@@ -59,6 +60,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Check if user is admin
+  const checkIfAdmin = (user) => {
+    if (user && user.email === 'sevenarmy364@gmail.com') {
+      setIsAdmin(true)
+      return true
+    } else {
+      setIsAdmin(false)
+      return false
+    }
+  }
+
   // Debug auth state
   useEffect(() => {
     console.log('AuthContext state changed:', { 
@@ -97,6 +109,7 @@ export const AuthProvider = ({ children }) => {
 
         if (session?.user && mounted) {
           setUser(session.user)
+          checkIfAdmin(session.user)
           await ensureProfileExists(session.user)
         } else if (mounted) {
           setUser(null)
@@ -130,18 +143,20 @@ export const AuthProvider = ({ children }) => {
         if (!mounted) return
 
         try {
-          if (event === 'SIGNED_OUT' || !session) {
-            console.log('User signed out or no session')
-            setUser(null)
-            setNeedsProfileSetup(false)
-            setLoading(false)
-            setInitialized(true)
-            return
-          }
+                  if (event === 'SIGNED_OUT' || !session) {
+          console.log('User signed out or no session')
+          setUser(null)
+          setIsAdmin(false)
+          setNeedsProfileSetup(false)
+          setLoading(false)
+          setInitialized(true)
+          return
+        }
 
           if (session?.user) {
             console.log('User signed in:', session.user.email)
             setUser(session.user)
+            checkIfAdmin(session.user)
             
             // Set a maximum timeout to ensure loading state is set to false
             const maxTimeout = setTimeout(() => {
@@ -186,6 +201,7 @@ export const AuthProvider = ({ children }) => {
             }
           } else {
             setUser(null)
+            setIsAdmin(false)
             setNeedsProfileSetup(false)
             if (mounted) {
               setLoading(false)
@@ -196,6 +212,7 @@ export const AuthProvider = ({ children }) => {
           console.error('Error in auth state change:', error)
           if (mounted) {
             setUser(null)
+            setIsAdmin(false)
             setNeedsProfileSetup(false)
             setLoading(false)
             setInitialized(true)
@@ -386,6 +403,7 @@ export const AuthProvider = ({ children }) => {
     needsProfileSetup,
     initialized,
     userProfile,
+    isAdmin,
     signIn,
     signUp,
     signOut,

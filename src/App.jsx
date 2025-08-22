@@ -10,6 +10,7 @@ import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import ProfileSetup from './pages/ProfileSetup'
 import Friends from './pages/Friends'
+import Admin from './pages/Admin'
 
 function AppContent() {
   const location = useLocation()
@@ -29,6 +30,11 @@ function AppContent() {
           <Route path="/friends" element={
             <ProtectedRoute>
               <Friends />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <Admin />
             </ProtectedRoute>
           } />
         </Routes>

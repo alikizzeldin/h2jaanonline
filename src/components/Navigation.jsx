@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Menu, X, LogIn, LogOut, User, Home, Users } from 'lucide-react'
+import { Menu, X, LogIn, LogOut, User, Home, Users, Shield } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from './LetterAvatar'
@@ -11,7 +11,7 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const { user, signOut, loading, userProfile } = useAuth()
+  const { user, signOut, loading, userProfile, isAdmin } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -147,6 +147,16 @@ export default function Navigation() {
                               <User className="w-4 h-4" />
                               <span>My Profile</span>
                             </Link>
+                            {isAdmin && (
+                              <Link
+                                to="/admin"
+                                onClick={() => setUserMenuOpen(false)}
+                                className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                              >
+                                <Shield className="w-4 h-4" />
+                                <span>Admin Panel</span>
+                              </Link>
+                            )}
                             <div className="border-t border-white/10 my-1"></div>
                             <button
                               onClick={handleSignOut}
