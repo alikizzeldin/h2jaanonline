@@ -13,11 +13,13 @@ import {
   Chrome,
   Calendar,
   MapPin,
-  Briefcase
+  Briefcase,
+  LogOut,
+  Shield
 } from 'lucide-react'
 
 export default function Profile() {
-  const { user, loading } = useAuth()
+  const { user, loading, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
   
   const [profile, setProfile] = useState({
@@ -113,6 +115,15 @@ export default function Profile() {
     }))
   }
 
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      navigate('/')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
+
 
 
   if (loading) {
@@ -160,6 +171,31 @@ export default function Profile() {
             }}
           />
         ))}
+      </div>
+
+      {/* Mobile Action Buttons */}
+      <div className="lg:hidden absolute top-6 right-6 z-20 flex space-x-2">
+        {isAdmin && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/admin')}
+            className="flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg text-primary hover:bg-primary/30 hover:text-primary/80 transition-all duration-300"
+          >
+            <Shield className="w-4 h-4" />
+            <span className="text-sm font-medium">Admin</span>
+          </motion.button>
+        )}
+        
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleSignOut}
+          className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/30 hover:text-red-300 transition-all duration-300"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="text-sm font-medium">Logout</span>
+        </motion.button>
       </div>
 
       {/* Profile Content */}
