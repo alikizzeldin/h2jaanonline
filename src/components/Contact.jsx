@@ -21,6 +21,7 @@ export default function Contact() {
     threshold: 0.1
   })
 
+  const [senderName, setSenderName] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
@@ -28,6 +29,11 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!senderName.trim()) {
+      setError('Please enter your name')
+      return
+    }
     
     if (!message.trim()) {
       setError('Please enter a message')
@@ -43,6 +49,7 @@ export default function Contact() {
         .from('messages')
         .insert([
           {
+            sender_name: senderName.trim(),
             message: message.trim(),
             created_at: new Date().toISOString()
           }
@@ -53,6 +60,7 @@ export default function Contact() {
       }
 
       setSuccess('Message sent successfully!')
+      setSenderName('')
       setMessage('')
     } catch (error) {
       console.error('Error sending message:', error)
@@ -222,35 +230,52 @@ export default function Contact() {
             <motion.div variants={itemVariants}>
               <div className="glass p-8 rounded-2xl">
                 <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  {error && (
-                    <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400">
-                      {error}
-                    </div>
-                  )}
-                  
-                  {success && (
-                    <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
-                      {success}
-                    </div>
-                  )}
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Message
-                    </label>
-                    <div className="relative">
-                      <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                      <textarea
-                        rows="6"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
-                        placeholder="Tell me about your project, collaboration idea, or just say hi!"
-                        required
-                      ></textarea>
-                    </div>
-                  </div>
+                                 <form className="space-y-6" onSubmit={handleSubmit}>
+                   {error && (
+                     <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400">
+                       {error}
+                     </div>
+                   )}
+                   
+                   {success && (
+                     <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
+                       {success}
+                     </div>
+                   )}
+                   
+                   <div>
+                     <label className="block text-sm font-medium text-gray-300 mb-2">
+                       Your Name
+                     </label>
+                     <div className="relative">
+                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                       <input
+                         type="text"
+                         value={senderName}
+                         onChange={(e) => setSenderName(e.target.value)}
+                         className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                         placeholder="Enter your name"
+                         required
+                       />
+                     </div>
+                   </div>
+                   
+                   <div>
+                     <label className="block text-sm font-medium text-gray-300 mb-2">
+                       Message
+                     </label>
+                     <div className="relative">
+                       <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                       <textarea
+                         rows="6"
+                         value={message}
+                         onChange={(e) => setMessage(e.target.value)}
+                         className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
+                         placeholder="Tell me about your project, collaboration idea, or just say hi!"
+                         required
+                       ></textarea>
+                     </div>
+                   </div>
                   
                   <motion.button
                     whileHover={{ scale: 1.02 }}

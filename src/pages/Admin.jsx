@@ -196,11 +196,15 @@ export default function Admin() {
                         </div>
                       </div>
                       
-                      <div className="space-y-2">
-                        <p className="text-white leading-relaxed whitespace-pre-wrap">
-                          {message.message}
-                        </p>
-                      </div>
+                                             <div className="space-y-2">
+                         <div className="flex items-center space-x-2 mb-2">
+                           <span className="text-primary font-medium">From:</span>
+                           <span className="text-white font-semibold">{message.sender_name}</span>
+                         </div>
+                         <p className="text-white leading-relaxed whitespace-pre-wrap">
+                           {message.message}
+                         </p>
+                       </div>
                     </div>
                     
                     <button
