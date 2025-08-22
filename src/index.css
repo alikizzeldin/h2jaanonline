@@ -225,3 +225,15 @@
     opacity: 0.5;
   }
 }
+
+/* Hide Spline watermark */
+.spline-watermark,
+[class*="spline-watermark"],
+iframe[src*="spline.design"] + div,
+iframe[src*="spline.design"] ~ div[class*="watermark"],
+iframe[src*="spline.design"] ~ div[class*="spline"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
