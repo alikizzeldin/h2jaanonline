@@ -4,8 +4,9 @@ import AnimatedBackground from '../components/AnimatedBackground'
 import BackgroundMusic from '../components/BackgroundMusic'
 import Hero from '../components/Hero'
 import About from '../components/About'
-import Gaming from '../components/Gaming'
+import Projects from '../components/Projects'
 import Skills from '../components/Skills'
+import CreativeSkills from '../components/CreativeSkills'
 import Contact from '../components/Contact'
 
 export default function Home() {
@@ -18,7 +19,8 @@ export default function Home() {
         <Hero />
         <About />
         <Skills />
-        <Gaming />
+        <Projects />
+        <CreativeSkills />
         <Contact />
       </main>
       

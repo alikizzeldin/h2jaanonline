@@ -40,7 +40,7 @@ const Logo = ({
            </span>
            {showSubtitle && (
              <span className={`text-gray-400 -mt-1 ${subtitleSizes[size]}`}>
-               Audio Engineer & Developer
+               Full Stack & AI Developer
              </span>
            )}
         </div>

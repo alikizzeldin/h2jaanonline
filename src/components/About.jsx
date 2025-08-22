@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Mic, AudioWaveform, Headphones, Music, Volume2, Radio } from 'lucide-react'
+import { Code, Database, Brain, Award, GraduationCap, BookOpen, Users, Zap } from 'lucide-react'
 
 export default function About() {
   const [ref, inView] = useInView({
@@ -33,37 +33,49 @@ export default function About() {
     }
   }
 
-  const audioExpertise = [
+  const expertiseAreas = [
     {
-      icon: <Mic className="w-6 h-6" />,
-      title: "Recording & Production",
-      description: "Professional audio recording, mixing, and mastering with industry-standard equipment and techniques."
+      icon: <Code className="w-6 h-6" />,
+      title: "Full Stack Development",
+      description: "Expert in building scalable web and mobile applications using modern technologies and frameworks."
     },
     {
-      icon: <AudioWaveform className="w-6 h-6" />,
-      title: "Sound Design",
-      description: "Creating immersive soundscapes and custom audio effects for various media projects."
+      icon: <Brain className="w-6 h-6" />,
+      title: "AI & Machine Learning",
+      description: "Specialized in developing intelligent solutions with computer vision, NLP, and deep learning."
     },
     {
-      icon: <Headphones className="w-6 h-6" />,
-      title: "Audio Post-Production",
-      description: "Expert in audio editing, restoration, and enhancement for broadcast and digital media."
+      icon: <Database className="w-6 h-6" />,
+      title: "Data Analytics",
+      description: "Proficient in data analysis, visualization, and generating actionable insights from complex datasets."
     },
     {
-      icon: <Music className="w-6 h-6" />,
-      title: "Music Production",
-      description: "Composing, arranging, and producing original music across multiple genres and styles."
+      icon: <Zap className="w-6 h-6" />,
+      title: "Cloud Computing",
+      description: "Experience with AWS, Azure, and cloud-native application development and deployment."
     },
     {
-      icon: <Volume2 className="w-6 h-6" />,
-      title: "Live Sound Engineering",
-      description: "Managing live audio systems, from small venues to large-scale events and concerts."
+      icon: <Users className="w-6 h-6" />,
+      title: "Team Collaboration",
+      description: "Strong problem-solving skills and experience working in collaborative development environments."
     },
     {
-      icon: <Radio className="w-6 h-6" />,
-      title: "Broadcast Audio",
-      description: "Specialized in radio production, podcast engineering, and streaming audio optimization."
+      icon: <Award className="w-6 h-6" />,
+      title: "Continuous Learning",
+      description: "Committed to staying current with 70+ certifications in cutting-edge technologies and methodologies."
     }
+  ]
+
+  const certifications = [
+    { category: "Web Development", count: 8, color: "from-blue-500 to-cyan-500" },
+    { category: "Programming Languages", count: 14, color: "from-green-500 to-emerald-500" },
+    { category: "C# & .NET", count: 5, color: "from-purple-500 to-pink-500" },
+    { category: "Data Science", count: 5, color: "from-orange-500 to-red-500" },
+    { category: "AI & Machine Learning", count: 8, color: "from-indigo-500 to-blue-500" },
+    { category: "SAP Technologies", count: 10, color: "from-yellow-500 to-orange-500" },
+    { category: "Cloud Computing", count: 2, color: "from-teal-500 to-cyan-500" },
+    { category: "DevOps & Tools", count: 2, color: "from-gray-500 to-slate-500" },
+    { category: "Project Management", count: 7, color: "from-pink-500 to-rose-500" }
   ]
 
   return (
@@ -81,7 +93,7 @@ export default function About() {
               About Me
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              A passionate creator at the intersection of audio engineering, technology, and gaming
+              Software Developer with 6 years of expertise in full stack development, artificial intelligence, and data analytics
             </p>
           </motion.div>
 
@@ -92,24 +104,21 @@ export default function About() {
               <div className="glass p-8 rounded-2xl">
                 <h3 className="text-2xl font-bold text-white mb-4">My Journey</h3>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  With a deep passion for audio engineering and technology, I've dedicated my career to 
-                  creating exceptional audio experiences. From recording studios to live venues, 
-                  I bring technical expertise and creative vision to every project.
+                  I bring a solid combination of academic achievement and practical application, including expertise in developing 
+                  scalable web and mobile applications, utilizing data to generate insights, and collaborating with AI models.
                 </p>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  My expertise spans across multiple domains - from professional audio production 
-                  and sound design to software development and system optimization. I believe in 
-                  the power of technology to enhance creative expression.
+                  With more than 70 certifications in state-of-the-art technologies and methodologies, I am committed to developing 
+                  intelligent, user-focused solutions and staying up to date with the latest developments in the tech industry.
                 </p>
                 <p className="text-gray-300 leading-relaxed">
-                  When I'm not crafting the perfect mix or coding innovative solutions, you'll find me 
-                  dominating the battlefields in <span className="text-primary font-semibold">SMITE 2</span>, 
-                  my absolute favorite game, or competing in Valorant, Rocket League, and other competitive titles.
+                  I'm dedicated to delivering high-quality work, always adding my personal touch and pushing for complete, 
+                  detail-oriented results that exceed expectations.
                 </p>
               </div>
             </motion.div>
 
-            {/* Profile Image Placeholder with Audio Visualization */}
+            {/* Profile Image Placeholder with Tech Visualization */}
             <motion.div variants={itemVariants} className="relative">
               <div className="glass p-8 rounded-2xl text-center">
                 <div className="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary via-secondary to-accent p-1">
@@ -118,9 +127,77 @@ export default function About() {
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Ali Izzeldin</h3>
-                <p className="text-primary font-medium">Audio Engineer & Developer</p>
+                <p className="text-primary font-medium">Software Developer & AI Specialist</p>
                 
-                {/* Audio Bars Animation */}
+                {/* Education Info */}
+                <div className="mt-4 p-4 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-center mb-2">
+                    <GraduationCap className="w-5 h-5 text-primary mr-2" />
+                    <span className="text-sm text-gray-300">Bachelor of Computer Science</span>
+                  </div>
+                  <div className="text-sm text-gray-400">Arab American University</div>
+                </div>
+                
+                {/* Audio Engineer Badge */}
+                <motion.div 
+                  className="mt-4 p-3 bg-gradient-to-r from-purple-500/20 to-purple-600/20 rounded-lg border border-purple-500/30 cursor-pointer group relative overflow-hidden"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 10px 25px rgba(147, 51, 234, 0.3)"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {/* Animated background on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-purple-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Floating music notes */}
+                  <div className="absolute inset-0 overflow-hidden rounded-lg">
+                    {[...Array(3)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute text-purple-400/60"
+                        style={{
+                          left: `${20 + i * 30}%`,
+                          top: `${30 + i * 20}%`,
+                        }}
+                        animate={{
+                          y: [0, -10, 0],
+                          opacity: [0, 1, 0],
+                          rotate: [0, 360],
+                        }}
+                        transition={{
+                          duration: 2 + Math.random() * 2,
+                          repeat: Infinity,
+                          delay: i * 0.5,
+                        }}
+                      >
+                        {['♪', '♫', '♬'][i]}
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center justify-center relative z-10">
+                    <motion.span 
+                      className="text-purple-400 text-sm font-medium group-hover:text-purple-200 transition-colors duration-300"
+                      animate={{
+                        textShadow: [
+                          "0 0 5px rgba(147, 51, 234, 0.5)",
+                          "0 0 15px rgba(147, 51, 234, 0.8)",
+                          "0 0 5px rgba(147, 51, 234, 0.5)"
+                        ]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      🎵 Audio Engineer
+                    </motion.span>
+                  </div>
+                </motion.div>
+                
+                {/* Tech Bars Animation */}
                 <div className="flex justify-center items-end space-x-1 mt-6 h-16">
                   {[...Array(12)].map((_, i) => (
                     <motion.div
@@ -141,13 +218,13 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Audio Expertise Grid */}
+          {/* Expertise Areas Grid */}
           <motion.div variants={itemVariants}>
             <h3 className="text-3xl font-bold text-center text-white mb-12">
-              Audio Engineering Expertise
+              Core Expertise Areas
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {audioExpertise.map((item, index) => (
+              {expertiseAreas.map((item, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
@@ -170,17 +247,46 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Gaming Passion Teaser */}
+          {/* Certifications Overview */}
+          <motion.div variants={itemVariants} className="mt-16">
+            <h3 className="text-3xl font-bold text-center text-white mb-12">
+              Professional Certifications
+            </h3>
+            <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
+              {certifications.map((cert, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="glass p-6 rounded-xl text-center hover:bg-white/5 transition-all duration-300 group"
+                >
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${cert.color} flex items-center justify-center`}>
+                    <BookOpen className="w-8 h-8 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    {cert.category}
+                  </h4>
+                  <div className="text-3xl font-bold text-gradient mb-2">
+                    {cert.count}
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Certifications
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Key Projects Teaser */}
           <motion.div variants={itemVariants} className="text-center mt-16">
             <div className="glass p-8 rounded-2xl max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">Beyond the Studio</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">Notable Projects</h3>
               <p className="text-gray-300 leading-relaxed mb-4">
-                My passion extends beyond audio engineering into the competitive gaming world. 
-                As a dedicated gamer, I bring the same precision and strategic thinking from audio production 
-                to virtual battlefields.
+                From AI-powered sign language translation systems to comprehensive family coordination apps, 
+                I've developed innovative solutions that demonstrate my full-stack capabilities and AI expertise.
               </p>
               <p className="text-primary font-semibold">
-                Ready to see my gaming achievements? Check out my gaming section below! 🎮
+                Ready to explore my projects? Check out my portfolio below! 💻
               </p>
             </div>
           </motion.div>

@@ -9,10 +9,11 @@ import {
   MapPin, 
   Github, 
   Linkedin, 
-  Instagram,
+  Code,
   Send,
   User,
-  MessageSquare
+  MessageSquare,
+  Briefcase
 } from 'lucide-react'
 
 export default function Contact() {
@@ -105,29 +106,29 @@ export default function Contact() {
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      description: "Drop me a line anytime",
+      description: "Professional inquiries",
       contact: "aliizzeldindev@gmail.com",
       color: "from-blue-500 to-cyan-500"
     },
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
-      description: "Let's have a conversation",
-      contact: "+970 0595114517",
+      description: "Direct communication",
+      contact: "+970 595114517",
       color: "from-green-500 to-emerald-500"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Location",
       description: "Available for remote work",
-      contact: "Global • Remote Ready",
+      contact: "Haifa Street, Jenin, Palestine",
       color: "from-purple-500 to-pink-500"
     },
     {
-      icon: <MessageCircle className="w-6 h-6" />,
-      title: "Discord",
-      description: "Gaming and collaboration",
-      contact: "h2jo",
+      icon: <Briefcase className="w-6 h-6" />,
+      title: "Availability",
+      description: "Open to opportunities",
+      contact: "Full-time • Contract • Freelance",
       color: "from-indigo-500 to-purple-500"
     }
   ]
@@ -146,10 +147,10 @@ export default function Contact() {
       color: "hover:text-blue-400"
     },
     {
-      icon: <Instagram className="w-6 h-6" />,
-      name: "Instagram",
-      url: "https://www.instagram.com/h2jaan/",
-      color: "hover:text-pink-400"
+      icon: <Code className="w-6 h-6" />,
+      name: "Portfolio",
+      url: "#",
+      color: "hover:text-primary"
     }
   ]
 
@@ -168,8 +169,8 @@ export default function Contact() {
               Let's Connect
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Ready to collaborate on your next audio project, discuss development opportunities, 
-              or team up for some epic gaming sessions? I'd love to hear from you!
+              Ready to collaborate on your next software project, discuss AI/ML opportunities, 
+              or explore full-stack development possibilities? I'd love to hear from you!
             </p>
           </motion.div>
 
@@ -179,9 +180,9 @@ export default function Contact() {
               <div>
                 <h3 className="text-2xl font-bold text-white mb-6">Get In Touch</h3>
                 <p className="text-gray-300 leading-relaxed mb-8">
-                  Whether you need professional audio engineering services, want to discuss 
-                  a software development project, or just want to chat about the latest gaming strategies, 
-                  I'm always excited to connect with fellow creators and gamers.
+                  Whether you need a full-stack developer for your next project, want to discuss 
+                  AI/ML integration opportunities, or are looking for expertise in mobile app development, 
+                  I'm always excited to connect with fellow developers and tech enthusiasts.
                 </p>
               </div>
 
@@ -216,7 +217,7 @@ export default function Contact() {
 
               {/* Social Links */}
               <div>
-                <h4 className="text-lg font-semibold text-white mb-4">Follow Me</h4>
+                <h4 className="text-lg font-semibold text-white mb-4">Connect With Me</h4>
                 <div className="flex space-x-4">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -237,114 +238,114 @@ export default function Contact() {
             <motion.div variants={itemVariants}>
               <div className="glass p-8 rounded-2xl">
                 <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
-                                 <form className="space-y-6" onSubmit={handleSubmit}>
-                   {error && (
-                     <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400">
-                       {error}
-                     </div>
-                   )}
-                   
-                   {success && (
-                     <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
-                       {success}
-                     </div>
-                   )}
-                   
-                   <div>
-                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                       Your Name
-                     </label>
-                     <div className="relative">
-                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                       <input
-                         type="text"
-                         value={senderName}
-                         onChange={(e) => setSenderName(e.target.value)}
-                         className={`w-full pl-10 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 ${
-                           isAnonymous 
-                             ? 'border-green-500/50 bg-green-500/10' 
-                             : 'border-white/10 focus:border-primary/50'
-                         }`}
-                         placeholder={isAnonymous ? 'Anonymous' : "Enter your name"}
-                         disabled={isAnonymous}
-                         required={!isAnonymous}
-                       />
-                     </div>
-                     {isAnonymous && (
-                       <p className="text-green-400 text-sm mt-1 flex items-center">
-                         <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                         Message will be sent anonymously
-                       </p>
-                     )}
-                   </div>
-                   
-                   <div>
-                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                       Message
-                     </label>
-                     <div className="relative">
-                       <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                       <textarea
-                         rows="6"
-                         value={message}
-                         onChange={(e) => setMessage(e.target.value)}
-                         className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
-                         placeholder="Tell me about your project, collaboration idea, or just say hi!"
-                         required
-                       ></textarea>
-                     </div>
-                   </div>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  {error && (
+                    <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400">
+                      {error}
+                    </div>
+                  )}
                   
-                                     <div className="flex space-x-3">
-                     <motion.button
-                       whileHover={{ scale: 1.02 }}
-                       whileTap={{ scale: 0.98 }}
-                       type="submit"
-                       disabled={loading}
-                       className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group disabled:opacity-50"
-                     >
-                       <Send className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                       {loading ? 'Sending...' : 'Send Message'}
-                     </motion.button>
-                     
-                     <motion.button
-                       whileHover={{ scale: 1.02 }}
-                       whileTap={{ scale: 0.98 }}
-                       type="button"
-                       onClick={handleAnonymousSend}
-                       disabled={loading || isAnonymous}
-                       className={`px-4 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group disabled:opacity-50 ${
-                         isAnonymous 
-                           ? 'bg-green-500/20 border border-green-500/50 text-green-400' 
-                           : 'bg-gray-600/20 border border-gray-500/50 text-gray-300 hover:bg-gray-600/30'
-                       }`}
-                     >
-                       <span className="text-sm">Anonymous</span>
-                     </motion.button>
-                   </div>
+                  {success && (
+                    <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
+                      {success}
+                    </div>
+                  )}
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Your Name
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        value={senderName}
+                        onChange={(e) => setSenderName(e.target.value)}
+                        className={`w-full pl-10 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 ${
+                          isAnonymous 
+                            ? 'border-green-500/50 bg-green-500/10' 
+                            : 'border-white/10 focus:border-primary/50'
+                        }`}
+                        placeholder={isAnonymous ? 'Anonymous' : "Enter your name"}
+                        disabled={isAnonymous}
+                        required={!isAnonymous}
+                      />
+                    </div>
+                    {isAnonymous && (
+                      <p className="text-green-400 text-sm mt-1 flex items-center">
+                        <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                        Message will be sent anonymously
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Message
+                    </label>
+                    <div className="relative">
+                      <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <textarea
+                        rows="6"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
+                        placeholder="Tell me about your project, collaboration idea, or development opportunity!"
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
+                 
+                  <div className="flex space-x-3">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 glow flex items-center justify-center group disabled:opacity-50"
+                    >
+                      <Send className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                      {loading ? 'Sending...' : 'Send Message'}
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      type="button"
+                      onClick={handleAnonymousSend}
+                      disabled={loading || isAnonymous}
+                      className={`px-4 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group disabled:opacity-50 ${
+                        isAnonymous 
+                          ? 'bg-green-500/20 border border-green-500/50 text-green-400' 
+                          : 'bg-gray-600/20 border border-gray-500/50 text-gray-300 hover:bg-gray-600/30'
+                      }`}
+                    >
+                      <span className="text-sm">Anonymous</span>
+                    </motion.button>
+                  </div>
                 </form>
               </div>
             </motion.div>
           </div>
 
-          {/* Fun Gaming CTA */}
+          {/* Professional CTA */}
           <motion.div variants={itemVariants} className="text-center mt-16">
             <div className="glass p-8 rounded-2xl max-w-4xl mx-auto border border-primary/20">
               <h3 className="text-2xl font-bold text-white mb-4">
-                🎮 Gaming Session Invitation
+                💻 Ready to Build Something Amazing?
               </h3>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Fellow gamer? Let's team up! I'm always down for some SMITE 2 matches, 
-                Valorant ranked games, or Rocket League sessions. Drop me a message and 
-                let's dominate the virtual battlefield together!
+                I'm passionate about creating innovative solutions that make a real impact. 
+                Whether it's AI-powered applications, full-stack web development, or mobile app creation, 
+                let's collaborate to bring your ideas to life!
               </p>
               <div className="flex flex-wrap justify-center gap-2">
-                {["SMITE 2", "Valorant", "Rocket League", "CS:GO", "Marvel Rivals"].map((game, index) => (
+                {["Full Stack Development", "AI/ML Integration", "Mobile Apps", "Web Applications", "Data Analytics"].map((skill, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full text-sm font-medium text-primary border border-primary/30"
                   >
-                    {game}
+                    {skill}
                   </span>
                 ))}
               </div>

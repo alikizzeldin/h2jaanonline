@@ -67,7 +67,8 @@ export default function Navigation() {
     { name: 'Home', section: 'home' },
     { name: 'About', section: 'about' },
     { name: 'Skills', section: 'skills' },
-    { name: 'Gaming', section: 'gaming' },
+    { name: 'Projects', section: 'projects' },
+    { name: 'Creative', section: 'creative-skills' },
     { name: 'Friends', section: 'friends', isPage: true },
     { name: 'Contact', section: 'contact' },
   ]

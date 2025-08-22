@@ -6,15 +6,16 @@ import {
   Database, 
   Globe, 
   Smartphone, 
-  Headphones, 
-  Mic, 
-  Music, 
-  Volume2,
-  Terminal,
+  Brain, 
+  Cloud, 
+  Terminal, 
   Layers,
   Zap,
   Settings,
-  Users
+  Users,
+  Award,
+  BookOpen,
+  GitBranch
 } from 'lucide-react'
 
 export default function Skills() {
@@ -49,56 +50,79 @@ export default function Skills() {
 
   const skillCategories = [
     {
-      title: "Audio Engineering",
-      icon: <Headphones className="w-8 h-8" />,
-      color: "from-purple-500 to-pink-500",
-      skills: [
-        { name: "Voice Over & Recording", level: 95 },
-        { name: "Mixing & Mastering", level: 92 },
-        { name: "Sound Design", level: 88 },
-        { name: "FL Studio", level: 90 },
-        { name: "Plugin Development", level: 85 },
-        { name: "Live Sound Engineering", level: 87 }
-      ]
-    },
-    {
-      title: "Programming",
+      title: "Programming Languages",
       icon: <Code className="w-8 h-8" />,
       color: "from-blue-500 to-cyan-500",
       skills: [
-        { name: "JavaScript", level: 92 },
-        { name: "React", level: 90 },
-        { name: "Node.js", level: 85 },
-        { name: "Python", level: 88 },
-        { name: "TypeScript", level: 80 },
-        { name: "SQL", level: 75 }
+        { name: "Python", level: 95 },
+        { name: "JavaScript/TypeScript", level: 92 },
+        { name: "C# & .NET", level: 90 },
+        { name: "Java", level: 88 },
+        { name: "Dart/Flutter", level: 85 },
+        { name: "C++", level: 80 }
       ]
     },
     {
-      title: "Social & Communication",
-      icon: <Users className="w-8 h-8" />,
+      title: "Web Development",
+      icon: <Globe className="w-8 h-8" />,
       color: "from-green-500 to-emerald-500",
       skills: [
-        { name: "Fast Typing (120+ WPM)", level: 95 },
-        { name: "Public Speaking", level: 90 },
-        { name: "Team Leadership", level: 88 },
-        { name: "Customer Service", level: 85 },
-        { name: "Event Management", level: 82 },
-        { name: "Cross-cultural Communication", level: 80 }
+        { name: "React.js", level: 95 },
+        { name: "ASP.NET Core", level: 92 },
+        { name: "HTML5/CSS3", level: 90 },
+        { name: "Django", level: 88 },
+        { name: "Node.js", level: 85 },
+        { name: "Bootstrap", level: 82 }
       ]
     },
     {
-      title: "Development Tools",
-      icon: <Terminal className="w-8 h-8" />,
+      title: "AI & Machine Learning",
+      icon: <Brain className="w-8 h-8" />,
+      color: "from-purple-500 to-pink-500",
+      skills: [
+        { name: "TensorFlow", level: 90 },
+        { name: "Computer Vision", level: 88 },
+        { name: "Natural Language Processing", level: 85 },
+        { name: "OpenAI API", level: 92 },
+        { name: "MediaPipe", level: 87 },
+        { name: "ML.NET", level: 80 }
+      ]
+    },
+    {
+      title: "Mobile & Cloud",
+      icon: <Smartphone className="w-8 h-8" />,
       color: "from-orange-500 to-red-500",
       skills: [
-        { name: "Git/GitHub", level: 88 },
-        { name: "VS Code", level: 95 },
-        { name: "Docker", level: 75 },
-        { name: "AWS", level: 70 },
-        { name: "Figma", level: 80 },
-        { name: "Webpack", level: 78 }
+        { name: "Flutter Development", level: 92 },
+        { name: "Firebase", level: 90 },
+        { name: "AWS", level: 85 },
+        { name: "Azure", level: 80 },
+        { name: "Mobile UI/UX", level: 88 },
+        { name: "Cross-platform", level: 90 }
       ]
+    }
+  ]
+
+  const technicalSkills = [
+    {
+      title: "Data Science",
+      icon: <Database className="w-6 h-6" />,
+      skills: ["NumPy", "Pandas", "Data Analysis", "Data Visualization", "Microsoft Copilot"]
+    },
+    {
+      title: "DevOps & Tools",
+      icon: <GitBranch className="w-6 h-6" />,
+      skills: ["Git/GitHub", "Linux CLI", "Docker", "VS Code", "Figma"]
+    },
+    {
+      title: "SAP Technologies",
+      icon: <Layers className="w-6 h-6" />,
+      skills: ["SAP S4HANA", "SAP Analytics Cloud", "SAP BusinessObjects", "SAP SuccessFactors"]
+    },
+    {
+      title: "Project Management",
+      icon: <Users className="w-6 h-6" />,
+      skills: ["Scrum Master", "Agile Development", "Problem Solving", "Critical Thinking", "Team Leadership"]
     }
   ]
 
@@ -138,10 +162,10 @@ export default function Skills() {
           {/* Section Header */}
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-6">
-              Skills & Expertise
+              Technical Skills & Expertise
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              A comprehensive toolkit spanning audio engineering, software development, and technical innovation
+              A comprehensive toolkit spanning programming languages, frameworks, AI/ML, and modern development technologies
             </p>
           </motion.div>
 
@@ -174,73 +198,56 @@ export default function Skills() {
             ))}
           </div>
 
-          {/* Technical Highlights */}
+          {/* Additional Technical Skills */}
           <motion.div variants={itemVariants} className="mb-16">
             <h3 className="text-3xl font-bold text-center text-white mb-12">
-              Technical Highlights
+              Additional Technical Skills
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  icon: <Zap className="w-6 h-6" />,
-                  title: "Performance",
-                  description: "Optimized audio processing and real-time system performance"
-                },
-                {
-                  icon: <Layers className="w-6 h-6" />,
-                  title: "Architecture",
-                  description: "Scalable software design and modular audio system integration"
-                },
-                {
-                  icon: <Settings className="w-6 h-6" />,
-                  title: "Automation",
-                  description: "Custom scripts and tools for workflow optimization"
-                },
-                {
-                  icon: <Globe className="w-6 h-6" />,
-                  title: "Integration",
-                  description: "Cross-platform compatibility and API development"
-                }
-              ].map((highlight, index) => (
+              {technicalSkills.map((skillGroup, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className="glass p-6 rounded-xl text-center hover:bg-white/5 transition-all duration-300 group"
+                  className="glass p-6 rounded-xl hover:bg-white/5 transition-all duration-300 group"
                 >
-                  <div className="flex justify-center mb-4">
+                  <div className="flex items-center mb-4">
                     <div className="p-3 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 text-primary group-hover:text-white transition-colors">
-                      {highlight.icon}
+                      {skillGroup.icon}
                     </div>
+                    <h4 className="text-lg font-semibold text-white ml-3">
+                      {skillGroup.title}
+                    </h4>
                   </div>
-                  <h4 className="text-lg font-semibold text-white mb-2">
-                    {highlight.title}
-                  </h4>
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    {highlight.description}
-                  </p>
+                  <div className="space-y-2">
+                    {skillGroup.skills.map((skill, skillIndex) => (
+                      <div key={skillIndex} className="text-sm text-gray-300 bg-white/5 px-3 py-1 rounded-full inline-block mr-2 mb-2">
+                        {skill}
+                      </div>
+                    ))}
+                  </div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          {/* Certifications & Awards */}
+          {/* Certifications & Achievements */}
           <motion.div variants={itemVariants} className="text-center">
             <div className="glass p-8 rounded-2xl max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-6">Continuous Learning</h3>
+              <h3 className="text-2xl font-bold text-white mb-6">Professional Development</h3>
               <p className="text-gray-300 leading-relaxed mb-6">
                 I'm constantly expanding my skillset through professional development, 
-                industry certifications, and hands-on project experience. My passion for 
-                both audio engineering and software development drives me to stay at the 
-                forefront of technological innovation.
+                industry certifications, and hands-on project experience. With over 70 certifications 
+                in cutting-edge technologies, I stay at the forefront of technological innovation.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 {[
-                  "Audio Engineering Society Member",
-                  "Pro Tools Certified",
-                  "AWS Cloud Practitioner",
-                  "Agile Development",
-                  "Live Sound Specialist"
+                  "70+ Professional Certifications",
+                  "Bachelor of Computer Science",
+                  "AI/ML Specialization",
+                  "Full Stack Development",
+                  "Cloud Computing Expert",
+                  "SAP Technologies Certified"
                 ].map((cert, index) => (
                   <span
                     key={index}

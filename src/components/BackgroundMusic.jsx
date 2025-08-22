@@ -14,10 +14,76 @@ export default function BackgroundMusic() {
   const volumeTimeoutRef = useRef(null)
 
   useEffect(() => {
-    // Don't auto-play - wait for user interaction
-    // This prevents browser autoplay restrictions and potential auth interference
-    console.log('BackgroundMusic mounted - waiting for user interaction')
-  }, [])
+    // Auto-play the audio when component mounts or on page reload
+    const autoPlayAudio = async () => {
+      if (audioRef.current) {
+        try {
+          // Set initial volume and playback rate
+          audioRef.current.volume = volume / 100
+          audioRef.current.playbackRate = playbackRate
+          
+          // Force load the audio
+          audioRef.current.load()
+          
+          // Try to play immediately
+          const playPromise = audioRef.current.play()
+          
+          if (playPromise !== undefined) {
+            await playPromise
+            setIsPlaying(true)
+            console.log('Background music auto-started successfully')
+          }
+        } catch (error) {
+          console.log('Auto-play failed (browser restriction):', error)
+          setIsPlaying(false)
+          
+          // Try again after user interaction
+          const handleUserInteraction = async () => {
+            try {
+              await audioRef.current.play()
+              setIsPlaying(true)
+              console.log('Background music started after user interaction')
+              // Remove the listener after successful play
+              document.removeEventListener('click', handleUserInteraction)
+              document.removeEventListener('keydown', handleUserInteraction)
+            } catch (err) {
+              console.log('Still failed after user interaction:', err)
+            }
+          }
+          
+          // Add listeners for user interaction
+          document.addEventListener('click', handleUserInteraction, { once: true })
+          document.addEventListener('keydown', handleUserInteraction, { once: true })
+        }
+      }
+    }
+
+    // Handle page visibility changes (reload, tab switch, etc.)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && audioRef.current && !isPlaying && !isMuted) {
+        // Try to resume playback when page becomes visible
+        setTimeout(autoPlayAudio, 100)
+      }
+    }
+
+    // Add visibility change listener
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Initial auto-play attempt
+    autoPlayAudio()
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, []) // Empty dependency array to run only on mount
+
+  // Separate effect for handling state changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100
+      audioRef.current.playbackRate = playbackRate
+    }
+  }, [volume, playbackRate])
 
   const toggleMute = (e) => {
     e.preventDefault()
