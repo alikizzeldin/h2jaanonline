@@ -15,7 +15,8 @@ import {
   Crown,
   Target,
   Brain,
-  Award
+  Award,
+  Coins
 } from 'lucide-react'
 
 const quizQuestions = [
@@ -94,7 +95,8 @@ const quizQuestions = [
 export default function Friends() {
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState([])
-  const [userStats, setUserStats] = useState({ medals: 0, hasPlayedQuiz: false })
+  const [coinsLeaderboard, setCoinsLeaderboard] = useState([])
+  const [userStats, setUserStats] = useState({ medals: 0, hasPlayedQuiz: false, coins: 0 })
   const [userProfile, setUserProfile] = useState(null)
   const [showQuiz, setShowQuiz] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -103,9 +105,11 @@ export default function Friends() {
   const [quizCompleted, setQuizCompleted] = useState(false)
   const [showResult, setShowResult] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [coinsUpdating, setCoinsUpdating] = useState(false)
 
   useEffect(() => {
     fetchLeaderboard()
+    fetchCoinsLeaderboard()
     fetchUserStats()
     fetchUserProfile()
     
@@ -119,23 +123,52 @@ export default function Friends() {
           table: 'profiles'
         },
         (payload) => {
-          // Refresh leaderboard when any profile changes
+          // Refresh leaderboards when any profile changes
           fetchLeaderboard()
+          fetchCoinsLeaderboard()
           
           // Update current user's profile if it's their change
           if (payload.new && payload.new.id === user.id) {
             setUserProfile(payload.new)
             setUserStats({
               medals: payload.new.medals || 0,
-              hasPlayedQuiz: payload.new.has_played_quiz || false
+              hasPlayedQuiz: payload.new.has_played_quiz || false,
+              coins: payload.new.coins || 0
             })
           }
         }
       )
       .subscribe()
 
+    // Listen for coins awarded events to update leaderboard immediately
+    const handleCoinsAwarded = (event) => {
+      const { userId, amount, newTotal } = event.detail
+      
+      // Update user stats if it's the current user
+      if (userId === user.id) {
+        setUserStats(prev => ({
+          ...prev,
+          coins: newTotal
+        }))
+      }
+      
+      // Show updating animation
+      setCoinsUpdating(true)
+      
+      // Refresh coins leaderboard immediately
+      fetchCoinsLeaderboard()
+      
+      // Hide updating animation after a short delay
+      setTimeout(() => {
+        setCoinsUpdating(false)
+      }, 1000)
+    }
+
+    window.addEventListener('coinsAwarded', handleCoinsAwarded)
+
     return () => {
       subscription.unsubscribe()
+      window.removeEventListener('coinsAwarded', handleCoinsAwarded)
     }
   }, [user])
 
@@ -188,11 +221,26 @@ export default function Friends() {
     }
   }
 
+  const fetchCoinsLeaderboard = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username, full_name, coins')
+        .order('coins', { ascending: false })
+        .limit(10)
+
+      if (error) throw error
+      setCoinsLeaderboard(data || [])
+    } catch (error) {
+      console.error('Error fetching coins leaderboard:', error)
+    }
+  }
+
   const fetchUserStats = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('medals, has_played_quiz')
+        .select('medals, has_played_quiz, coins')
         .eq('id', user.id)
         .single()
 
@@ -201,7 +249,8 @@ export default function Friends() {
       if (data) {
         setUserStats({
           medals: data.medals || 0,
-          hasPlayedQuiz: data.has_played_quiz || false
+          hasPlayedQuiz: data.has_played_quiz || false,
+          coins: data.coins || 0
         })
       }
       setLoading(false)
@@ -367,9 +416,15 @@ export default function Friends() {
                       <h3 className="text-xl font-bold text-white">
                         {userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
                       </h3>
-                      <div className="flex items-center space-x-2">
-                        <Medal className="w-4 h-4 text-yellow-500" />
-                        <span className="text-yellow-500 font-semibold">{userStats.medals} medals</span>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2">
+                          <Medal className="w-4 h-4 text-yellow-500" />
+                          <span className="text-yellow-500 font-semibold">{userStats.medals} medals</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Coins className="w-4 h-4 text-yellow-400" />
+                          <span className="text-yellow-400 font-semibold">{userStats.coins} coins</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -391,11 +446,11 @@ export default function Friends() {
                 </div>
               </div>
 
-              {/* Leaderboard */}
-              <div className="glass p-8 rounded-2xl border border-white/10">
+              {/* Quiz Leaderboard */}
+              <div className="glass p-8 rounded-2xl border border-white/10 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                   <Crown className="w-6 h-6 text-yellow-500 mr-2" />
-                  Top Players
+                  Quiz Champions
                 </h2>
                 
                 {leaderboard.length === 0 ? (
@@ -442,6 +497,76 @@ export default function Friends() {
                         <div className="flex items-center space-x-2">
                           <Medal className="w-5 h-5 text-yellow-500" />
                           <span className="text-yellow-500 font-bold text-lg">{player.medals || 0}</span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Coins Leaderboard */}
+              <div className="glass p-8 rounded-2xl border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Coins className="w-6 h-6 text-yellow-400 mr-2" />
+                    Coins Collectors
+                  </div>
+                  {coinsUpdating && (
+                    <motion.div
+                      animate={{ opacity: [1, 0.7, 1] }}
+                      transition={{ duration: 0.5, repeat: Infinity }}
+                      className="flex items-center space-x-2 text-yellow-400 text-sm"
+                    >
+                      <div className="w-3 h-3 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span>Live updating...</span>
+                    </motion.div>
+                  )}
+                </h2>
+                
+                {coinsLeaderboard.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Coins className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-400">No coins collected yet. Start being active to earn coins!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {coinsLeaderboard.map((player, index) => (
+                      <motion.div
+                        key={player.username || index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-300 ${
+                          index === 0 ? 'bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 border border-yellow-400/30' :
+                          index === 1 ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/20 border border-gray-400/30' :
+                          index === 2 ? 'bg-gradient-to-r from-amber-600/20 to-amber-700/20 border border-amber-600/30' :
+                          'bg-white/5 border border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white font-bold">
+                            {index === 0 ? <Crown className="w-5 h-5 text-yellow-400" /> :
+                             index === 1 ? <Medal className="w-5 h-5 text-gray-400" /> :
+                             index === 2 ? <Award className="w-5 h-5 text-amber-600" /> :
+                             index + 1}
+                          </div>
+                          <LetterAvatar
+                            username={player.username}
+                            fullName={player.full_name}
+                            size="w-12 h-12"
+                            textSize="text-lg"
+                          />
+                          <div>
+                            <h4 className="text-white font-semibold">
+                              {player.full_name || player.username || 'Anonymous'}
+                            </h4>
+                            <p className="text-gray-400 text-sm">@{player.username}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          <Coins className="w-5 h-5 text-yellow-400" />
+                          <span className="text-yellow-400 font-bold text-lg">{player.coins || 0}</span>
                         </div>
                       </motion.div>
                     ))}

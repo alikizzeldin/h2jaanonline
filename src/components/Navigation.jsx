@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Menu, X, LogIn, LogOut, User, Home, Users, Shield } from 'lucide-react'
+import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from './LetterAvatar'
 import Logo from './Logo'
+import CoinsDisplay from './CoinsDisplay'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -69,14 +70,16 @@ export default function Navigation() {
     { name: 'Skills', section: 'skills' },
     { name: 'Projects', section: 'projects' },
     { name: 'Creative', section: 'creative-skills' },
-    { name: 'Friends', section: 'friends', isPage: true },
+    ...(user ? [{ name: 'Games', section: 'games', isPage: true }] : []),
+    ...(user ? [{ name: 'Friends', section: 'friends', isPage: true }] : []),
     { name: 'Contact', section: 'contact' },
   ]
 
   const mobileNavItems = [
     { name: 'Home', path: '/', icon: Home },
-    { name: 'Friends', path: '/friends', icon: Users },
-    { name: 'Profile', path: '/profile', icon: User },
+    ...(user ? [{ name: 'Games', path: '/games', icon: Gamepad2 }] : []),
+    ...(user ? [{ name: 'Friends', path: '/friends', icon: Users }] : []),
+    ...(user ? [{ name: 'Profile', path: '/profile', icon: User }] : []),
   ]
 
   return (
@@ -115,6 +118,7 @@ export default function Navigation() {
               {/* Auth Section */}
               {!loading && (
                 <div className="flex items-center space-x-3 ml-6">
+                  {user && <CoinsDisplay />}
                   {user ? (
                     <div className="relative">
                       <motion.button

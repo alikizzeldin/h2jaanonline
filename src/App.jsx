@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { CoinsProvider } from './contexts/CoinsContext'
 import Navigation from './components/Navigation'
 import ProfileSetupRedirect from './components/ProfileSetupRedirect'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -11,6 +12,7 @@ import Profile from './pages/Profile'
 import ProfileSetup from './pages/ProfileSetup'
 import Friends from './pages/Friends'
 import Admin from './pages/Admin'
+import Games from './pages/Games'
 
 function AppContent() {
   const location = useLocation()
@@ -27,6 +29,11 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile-setup" element={<ProfileSetup />} />
+          <Route path="/games" element={
+            <ProtectedRoute>
+              <Games />
+            </ProtectedRoute>
+          } />
           <Route path="/friends" element={
             <ProtectedRoute>
               <Friends />
@@ -46,9 +53,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <CoinsProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </CoinsProvider>
     </AuthProvider>
   )
 }
