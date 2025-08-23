@@ -1,0 +1,9 @@
+warning: in the working copy of 'src/components/Navigation.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/contexts/AuthContext.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pages/Friends.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pages/Profile.jsx', LF will be replaced by CRLF the next time Git touches it
+src/App.jsx
+src/components/Navigation.jsx
+src/contexts/AuthContext.jsx
+src/pages/Friends.jsx
+src/pages/Profile.jsx

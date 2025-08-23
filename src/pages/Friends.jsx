@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from '../components/LetterAvatar'
+import GradientText from '../components/GradientText'
 import { 
   Trophy, 
   Users, 
@@ -113,6 +114,10 @@ export default function Friends() {
     fetchUserStats()
     fetchUserProfile()
     
+    // Debug: Log the leaderboard data to see if text_gradient_enabled is included
+    console.log('Friends - Current leaderboard:', leaderboard)
+    console.log('Friends - Current coins leaderboard:', coinsLeaderboard)
+    
     // Set up real-time subscription for profile and leaderboard changes
     const subscription = supabase
       .channel('friends_changes')
@@ -210,11 +215,12 @@ export default function Friends() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, full_name, medals')
+        .select('username, full_name, medals, text_gradient_enabled')
         .order('medals', { ascending: false })
         .limit(10)
 
       if (error) throw error
+
       setLeaderboard(data || [])
     } catch (error) {
       console.error('Error fetching leaderboard:', error)
@@ -225,11 +231,12 @@ export default function Friends() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, full_name, coins')
+        .select('username, full_name, coins, text_gradient_enabled')
         .order('coins', { ascending: false })
         .limit(10)
 
       if (error) throw error
+
       setCoinsLeaderboard(data || [])
     } catch (error) {
       console.error('Error fetching coins leaderboard:', error)
@@ -413,9 +420,14 @@ export default function Friends() {
                       textSize="text-xl"
                     />
                     <div>
-                      <h3 className="text-xl font-bold text-white">
-                        {userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
-                      </h3>
+                                              <h3 className="text-xl font-bold text-white">
+                          <GradientText 
+                            enabled={userProfile?.text_gradient_enabled}
+                            className="text-xl font-bold"
+                          >
+                            {userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
+                          </GradientText>
+                        </h3>
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2">
                           <Medal className="w-4 h-4 text-yellow-500" />
@@ -487,8 +499,13 @@ export default function Friends() {
                             textSize="text-lg"
                           />
                           <div>
-                            <h4 className="text-white font-semibold">
-                              {player.full_name || player.username || 'Anonymous'}
+                            <h4 className="font-semibold">
+                              <GradientText 
+                                enabled={player.text_gradient_enabled}
+                                className="text-white"
+                              >
+                                {player.full_name || player.username || 'Anonymous'}
+                              </GradientText>
                             </h4>
                             <p className="text-gray-400 text-sm">@{player.username}</p>
                           </div>
@@ -557,8 +574,13 @@ export default function Friends() {
                             textSize="text-lg"
                           />
                           <div>
-                            <h4 className="text-white font-semibold">
-                              {player.full_name || player.username || 'Anonymous'}
+                            <h4 className="font-semibold">
+                              <GradientText 
+                                enabled={player.text_gradient_enabled}
+                                className="text-white"
+                              >
+                                {player.full_name || player.username || 'Anonymous'}
+                              </GradientText>
                             </h4>
                             <p className="text-gray-400 text-sm">@{player.username}</p>
                           </div>

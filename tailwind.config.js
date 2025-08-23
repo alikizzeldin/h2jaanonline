@@ -12,6 +12,14 @@ export default {
         accent: '#06b6d4',
         dark: '#0f172a',
         'dark-lighter': '#1e293b',
+        red: {
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -35,10 +43,10 @@ export default {
         },
         'gradient-x': {
           '0%, 100%': {
-            transform: 'translateX(-50%)',
+            'background-position': '0% 50%',
           },
           '50%': {
-            transform: 'translateX(50%)',
+            'background-position': '100% 50%',
           },
         },
         'gradient-xy': {
@@ -66,4 +74,22 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    'bg-gradient-to-r',
+    'from-red-400',
+    'from-red-500',
+    'via-red-600',
+    'via-red-700', 
+    'to-red-700',
+    'to-black',
+    'bg-clip-text',
+    'text-transparent',
+    'animate-gradient-x',
+    'text-sm',
+    'text-base',
+    'text-lg',
+    'text-xl',
+    'text-2xl',
+    'text-3xl'
+  ],
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2 } from 'lucide-react'
+import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2, ShoppingBag } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from './LetterAvatar'
 import Logo from './Logo'
 import CoinsDisplay from './CoinsDisplay'
+import GradientText from './GradientText'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,15 +26,7 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Debug auth state
-  useEffect(() => {
-    console.log('Navigation - Auth state:', { 
-      user: !!user, 
-      loading, 
-      userEmail: user?.email,
-      hasProfile: !!userProfile
-    })
-  }, [user, loading, userProfile])
+
 
   const handleSignOut = async () => {
     await signOut()
@@ -72,6 +65,7 @@ export default function Navigation() {
     { name: 'Creative', section: 'creative-skills' },
     ...(user ? [{ name: 'Games', section: 'games', isPage: true }] : []),
     ...(user ? [{ name: 'Friends', section: 'friends', isPage: true }] : []),
+    ...(user ? [{ name: 'Shop', section: 'shop', isPage: true }] : []),
     { name: 'Contact', section: 'contact' },
   ]
 
@@ -79,6 +73,7 @@ export default function Navigation() {
     { name: 'Home', path: '/', icon: Home },
     ...(user ? [{ name: 'Games', path: '/games', icon: Gamepad2 }] : []),
     ...(user ? [{ name: 'Friends', path: '/friends', icon: Users }] : []),
+    ...(user ? [{ name: 'Shop', path: '/shop', icon: ShoppingBag }] : []),
     ...(user ? [{ name: 'Profile', path: '/profile', icon: User }] : []),
   ]
 
@@ -133,7 +128,12 @@ export default function Navigation() {
                           size="w-8 h-8"
                           textSize="text-sm"
                         />
-                        <span>{userProfile?.username || user.user_metadata?.user_name || user.email?.split('@')[0]}</span>
+                        <GradientText 
+                          enabled={userProfile?.text_gradient_enabled}
+                          className="text-gray-300 hover:text-white"
+                        >
+                          {userProfile?.full_name || user.user_metadata?.full_name || userProfile?.username || user.user_metadata?.user_name || user.email?.split('@')[0]}
+                        </GradientText>
                       </motion.button>
 
                       {/* User Menu Dropdown */}

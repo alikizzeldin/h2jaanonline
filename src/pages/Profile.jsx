@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from '../components/LetterAvatar'
+import GradientText from '../components/GradientText'
 import { 
   User, 
   Mail, 
@@ -15,11 +16,13 @@ import {
   MapPin,
   Briefcase,
   LogOut,
-  Shield
+  Shield,
+  Palette,
+  Sparkles
 } from 'lucide-react'
 
 export default function Profile() {
-  const { user, loading, signOut, isAdmin } = useAuth()
+  const { user, loading, signOut, isAdmin, clearProfileCache } = useAuth()
   const navigate = useNavigate()
   
   const [profile, setProfile] = useState({
@@ -28,7 +31,9 @@ export default function Profile() {
     bio: '',
     location: '',
     website: '',
-    company: ''
+    company: '',
+    text_gradient_enabled: false,
+    text_gradient_purchased: false
   })
   
   const [isEditing, setIsEditing] = useState(false)
@@ -70,7 +75,9 @@ export default function Profile() {
           bio: '',
           location: '',
           website: '',
-          company: ''
+          company: '',
+          text_gradient_enabled: false,
+          text_gradient_purchased: false
         }
         setProfile(newProfile)
       }
@@ -113,6 +120,47 @@ export default function Profile() {
       ...prev,
       [field]: value
     }))
+  }
+
+  const handleGradientToggle = async () => {
+    try {
+      const newGradientState = !profile.text_gradient_enabled
+      
+      // Update the profile state immediately for UI responsiveness
+      setProfile(prev => ({
+        ...prev,
+        text_gradient_enabled: newGradientState
+      }))
+
+      // Update the database (only the enabled state, not the purchased state)
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          text_gradient_enabled: newGradientState,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id)
+
+      if (error) {
+        console.error('Error updating gradient setting:', error)
+        // Revert the state if there was an error
+        setProfile(prev => ({
+          ...prev,
+          text_gradient_enabled: !newGradientState
+        }))
+        setError('Failed to update gradient setting')
+        return
+      }
+
+      // Clear the profile cache to force a refresh
+      clearProfileCache(user.id)
+      
+      setSuccess(`Gradient effect ${newGradientState ? 'enabled' : 'disabled'} successfully!`)
+      setTimeout(() => setSuccess(''), 3000)
+    } catch (error) {
+      console.error('Error toggling gradient:', error)
+      setError('Failed to update gradient setting')
+    }
   }
 
   const handleSignOut = async () => {
@@ -249,8 +297,13 @@ export default function Profile() {
 
               <div className="flex-1 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start space-x-2 mb-2">
-                  <h2 className="text-2xl font-bold text-white">
-                    {profile.full_name || profile.username || 'Anonymous User'}
+                  <h2 className="text-2xl font-bold">
+                    <GradientText 
+                      enabled={profile.text_gradient_enabled}
+                      className="text-white"
+                    >
+                      {profile.full_name || profile.username || 'Anonymous User'}
+                    </GradientText>
                   </h2>
                   {user.user_metadata?.provider === 'github' && (
                     <Github className="w-5 h-5 text-gray-400" />
@@ -396,6 +449,155 @@ export default function Profile() {
                   placeholder="https://your-website.com"
                 />
               </div>
+
+              {/* Text Gradient Customization Section */}
+              {profile.text_gradient_purchased && (
+                <div className="md:col-span-2">
+                  <div className="p-6 rounded-2xl bg-gradient-to-r from-red-500/10 to-red-600/10 border border-red-500/20">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="p-2 rounded-full bg-gradient-to-r from-red-500/20 to-red-600/20">
+                        <Palette className="w-5 h-5 text-red-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Text Gradient Customization</h3>
+                        <p className="text-gray-400 text-sm">Customize your name appearance across the website</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* Preview Section */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Preview
+                        </label>
+                        <div className="p-4 rounded-lg bg-black/20 border border-white/10">
+                          <div className="text-center">
+                            <GradientText 
+                              enabled={true}
+                              className="text-2xl font-bold"
+                            >
+                              {profile.full_name || profile.username || 'Your Name'}
+                            </GradientText>
+                            <p className="text-gray-400 text-sm mt-2">
+                              This is how your name will appear in leaderboards and across the website
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Gradient Options */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-3">
+                          Gradient Style
+                        </label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="p-4 rounded-lg bg-gradient-to-r from-red-500/10 to-red-600/10 border border-red-500/30 cursor-pointer hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 transition-all duration-300">
+                            <div className="text-center">
+                              <div className="text-lg font-bold bg-gradient-to-r from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent animate-gradient-x mb-2">
+                                Red & Black Gradient
+                              </div>
+                              <p className="text-gray-400 text-xs">Animated red and black gradient</p>
+                            </div>
+                          </div>
+                          
+                          <div className="p-4 rounded-lg bg-gray-500/10 border border-gray-500/30 cursor-not-allowed opacity-50">
+                            <div className="text-center">
+                              <div className="text-lg font-bold text-gray-400 mb-2">
+                                More Styles Coming Soon
+                              </div>
+                              <p className="text-gray-500 text-xs">Stay tuned for more gradient options</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Toggle Gradient Section */}
+                      <div className="flex items-center justify-between p-4 rounded-lg bg-gray-500/10 border border-gray-500/20">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex items-center">
+                            <label className="text-sm font-medium text-gray-300">
+                              Gradient Effect
+                            </label>
+                          </div>
+                        </div>
+                        <button
+                          onClick={handleGradientToggle}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                            profile.text_gradient_enabled
+                              ? 'bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30'
+                              : 'bg-gray-500/20 text-gray-400 border border-gray-500/30 hover:bg-gray-500/30'
+                          }`}
+                        >
+                          {profile.text_gradient_enabled ? 'Turn Off' : 'Turn On'}
+                        </button>
+                      </div>
+
+                      {/* Info Section */}
+                      <div className="flex items-start space-x-3 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                        <Sparkles className="w-5 h-5 text-blue-400 mt-0.5" />
+                        <div>
+                          <h4 className="text-blue-300 font-medium mb-1">Gradient Feature Active</h4>
+                          <p className="text-blue-400 text-sm">
+                            Your name will now appear with the animated red and black gradient effect across all pages where your name is displayed, including leaderboards and profile sections.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Purchase Gradient Feature Section */}
+              {!profile.text_gradient_enabled && (
+                <div className="md:col-span-2">
+                  <div className="p-6 rounded-2xl bg-gradient-to-r from-gray-500/10 to-gray-600/10 border border-gray-500/20">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="p-2 rounded-full bg-gradient-to-r from-gray-500/20 to-gray-600/20">
+                        <Palette className="w-5 h-5 text-gray-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">Unlock Text Gradient</h3>
+                        <p className="text-gray-400 text-sm">Make your name stand out with animated gradients</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* Preview of what they could have */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Preview (After Purchase)
+                        </label>
+                        <div className="p-4 rounded-lg bg-black/20 border border-white/10">
+                          <div className="text-center">
+                            <div className="text-2xl font-bold bg-gradient-to-r from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent animate-gradient-x">
+                              {profile.full_name || profile.username || 'Your Name'}
+                            </div>
+                            <p className="text-gray-400 text-sm mt-2">
+                              Your name with animated red and black gradient
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Purchase Button */}
+                      <div className="text-center">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => navigate('/shop')}
+                          className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 glow"
+                        >
+                          <Sparkles className="w-5 h-5" />
+                          <span>Purchase for 50 Coins</span>
+                        </motion.button>
+                        <p className="text-gray-400 text-sm mt-2">
+                          Visit the shop to purchase this exclusive feature
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

@@ -235,12 +235,15 @@ export const AuthProvider = ({ children }) => {
       
       // First, try to get profile from cache
       const cachedProfile = getCachedProfile(user.id)
-      if (cachedProfile) {
+      if (cachedProfile && cachedProfile.hasOwnProperty('text_gradient_enabled') && cachedProfile.hasOwnProperty('text_gradient_purchased')) {
         console.log('Using cached profile:', cachedProfile)
         setUserProfile(cachedProfile)
         const needsSetup = !cachedProfile.username || cachedProfile.username.trim() === ''
         setNeedsProfileSetup(needsSetup)
         return
+      } else if (cachedProfile) {
+        console.log('Cached profile missing gradient fields, clearing cache and refetching')
+        clearCachedProfile(user.id)
       }
       
       // If no cache, fetch from database
@@ -254,7 +257,7 @@ export const AuthProvider = ({ children }) => {
       // Check if profile exists with timeout
       const profilePromise = supabase
         .from('profiles')
-        .select('id, username, full_name')
+        .select('id, username, full_name, text_gradient_enabled, text_gradient_purchased')
         .eq('id', user.id)
         .single()
 
@@ -280,6 +283,8 @@ export const AuthProvider = ({ children }) => {
                       user.user_metadata?.name || '',
             medals: 0,
             has_played_quiz: false,
+            text_gradient_enabled: false,
+            text_gradient_purchased: false,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           })
@@ -295,7 +300,9 @@ export const AuthProvider = ({ children }) => {
                      user.user_metadata?.preferred_username || 
                      user.email?.split('@')[0] || '',
             full_name: user.user_metadata?.full_name || 
-                      user.user_metadata?.name || ''
+                      user.user_metadata?.name || '',
+            text_gradient_enabled: false,
+            text_gradient_purchased: false
           }
           setCachedProfile(user.id, newProfile)
           setUserProfile(newProfile)

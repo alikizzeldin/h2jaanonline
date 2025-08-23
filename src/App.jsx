@@ -13,6 +13,8 @@ import ProfileSetup from './pages/ProfileSetup'
 import Friends from './pages/Friends'
 import Admin from './pages/Admin'
 import Games from './pages/Games'
+import Shop from './pages/Shop'
+
 
 function AppContent() {
   const location = useLocation()
@@ -39,12 +41,19 @@ function AppContent() {
               <Friends />
             </ProtectedRoute>
           } />
+          <Route path="/shop" element={
+            <ProtectedRoute>
+              <Shop />
+            </ProtectedRoute>
+          } />
           <Route path="/admin" element={
             <ProtectedRoute>
               <Admin />
             </ProtectedRoute>
           } />
         </Routes>
+        
+
       </div>
     </ProfileSetupRedirect>
   )
