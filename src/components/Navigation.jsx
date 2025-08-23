@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2, ShoppingBag } from 'lucide-react'
+import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2, Store } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from './LetterAvatar'
@@ -65,7 +65,6 @@ export default function Navigation() {
     { name: 'Creative', section: 'creative-skills' },
     ...(user ? [{ name: 'Games', section: 'games', isPage: true }] : []),
     ...(user ? [{ name: 'Friends', section: 'friends', isPage: true }] : []),
-    ...(user ? [{ name: 'Shop', section: 'shop', isPage: true }] : []),
     { name: 'Contact', section: 'contact' },
   ]
 
@@ -73,7 +72,7 @@ export default function Navigation() {
     { name: 'Home', path: '/', icon: Home },
     ...(user ? [{ name: 'Games', path: '/games', icon: Gamepad2 }] : []),
     ...(user ? [{ name: 'Friends', path: '/friends', icon: Users }] : []),
-    ...(user ? [{ name: 'Shop', path: '/shop', icon: ShoppingBag }] : []),
+    ...(user ? [{ name: 'Shop', path: '/shop', icon: Store }] : []),
     ...(user ? [{ name: 'Profile', path: '/profile', icon: User }] : []),
   ]
 
@@ -114,6 +113,17 @@ export default function Navigation() {
               {!loading && (
                 <div className="flex items-center space-x-3 ml-6">
                   {user && <CoinsDisplay />}
+                  {user && (
+                    <Link to="/shop">
+                      <motion.button
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="flex items-center justify-center transition-all duration-300 group"
+                      >
+                        <Store className="w-6 h-6 text-blue-500 group-hover:scale-110 transition-all duration-300 filter drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] group-hover:drop-shadow-[0_0_8px_rgba(147,51,234,0.6)]" />
+                      </motion.button>
+                    </Link>
+                  )}
                   {user ? (
                     <div className="relative">
                       <motion.button
