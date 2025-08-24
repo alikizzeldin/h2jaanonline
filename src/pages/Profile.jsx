@@ -7,7 +7,6 @@ import LetterAvatar from '../components/LetterAvatar'
 import AvatarUpload from '../components/AvatarUpload'
 import Avatar from '../components/Avatar'
 import GradientText from '../components/GradientText'
-import GradientDebug from '../components/GradientDebug'
 import { 
   User, 
   Mail, 
@@ -307,30 +306,7 @@ export default function Profile() {
         ))}
       </div>
 
-      {/* Mobile Action Buttons */}
-      <div className="lg:hidden absolute top-6 right-6 z-20 flex space-x-2">
-        {isAdmin && (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/admin')}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg text-primary hover:bg-primary/30 hover:text-primary/80 transition-all duration-300"
-          >
-            <Shield className="w-4 h-4" />
-            <span className="text-sm font-medium">Admin</span>
-          </motion.button>
-        )}
-        
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleSignOut}
-          className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/30 hover:text-red-300 transition-all duration-300"
-        >
-          <LogOut className="w-4 h-4" />
-          <span className="text-sm font-medium">Logout</span>
-        </motion.button>
-      </div>
+
 
       {/* Profile Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
@@ -713,8 +689,6 @@ export default function Profile() {
         </motion.div>
       </div>
       
-      {/* Debug Component */}
-      <GradientDebug />
     </div>
   )
 }

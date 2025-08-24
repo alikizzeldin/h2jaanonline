@@ -3,17 +3,19 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './contexts/AuthContext'
 import { CoinsProvider } from './contexts/CoinsContext'
 import Navigation from './components/Navigation'
-import ProfileSetupRedirect from './components/ProfileSetupRedirect'
-import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import ProfileSetup from './pages/ProfileSetup'
-import Friends from './pages/Friends'
+import ProfileSetupRedirect from './components/ProfileSetupRedirect'
+import ProtectedRoute from './components/ProtectedRoute'
 import Admin from './pages/Admin'
+import Friends from './pages/Friends'
 import Games from './pages/Games'
 import Shop from './pages/Shop'
+import AvatarTestPage from './pages/AvatarTestPage'
+import './index.css'
 
 
 function AppContent() {
@@ -51,9 +53,13 @@ function AppContent() {
               <Admin />
             </ProtectedRoute>
           } />
+          <Route path="/avatar-test" element={
+            <ProtectedRoute>
+              <AvatarTestPage />
+            </ProtectedRoute>
+          } />
         </Routes>
         
-
       </div>
     </ProfileSetupRedirect>
   )

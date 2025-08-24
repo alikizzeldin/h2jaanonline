@@ -284,7 +284,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="relative h-[900px] lg:h-[1000px] flex items-start justify-center -mt-20"
+            className="relative h-[900px] lg:h-[1000px] flex items-start justify-center -mt-20 hidden lg:block"
           >
             <iframe 
               src='https://my.spline.design/nexbotrobotcharacterconcept-odNgd5gDSGb57a9kcWNwQhe7/' 

@@ -379,7 +379,7 @@ export default function Friends() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-16 sm:pb-20">
         <AnimatePresence mode="wait">
           {!showQuiz ? (
             <motion.div
@@ -390,53 +390,53 @@ export default function Friends() {
               transition={{ duration: 0.6 }}
             >
               {/* Header */}
-              <div className="text-center mb-12">
+              <div className="text-center mb-8 sm:mb-12">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                  className="flex justify-center mb-6"
+                  className="flex justify-center mb-4 sm:mb-6"
                 >
-                  <div className="p-4 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500">
-                    <Trophy className="w-12 h-12 text-white" />
+                  <div className="p-3 sm:p-4 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500">
+                    <Trophy className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
                   </div>
                 </motion.div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gradient mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gradient mb-3 sm:mb-4">
                   Friends Leaderboard
                 </h1>
-                <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
                   Test your knowledge about Ali and earn medals to climb the leaderboard!
                 </p>
               </div>
 
               {/* User Stats Card */}
-              <div className="glass p-6 rounded-2xl border border-white/10 mb-8">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+              <div className="glass p-4 sm:p-6 rounded-2xl border border-white/10 mb-6 sm:mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
                     <Avatar
                       src={userProfile?.avatar}
                       alt={userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
-                      size={64}
+                      size={48}
                       fallbackText={userProfile?.username || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
                       showBorder={true}
                     />
-                    <div>
-                                              <h3 className="text-xl font-bold text-white">
-                          <GradientText 
-                            enabled={userProfile?.text_gradient_enabled}
-                            className="text-xl font-bold"
-                          >
-                            {userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
-                          </GradientText>
-                        </h3>
-                      <div className="flex items-center space-x-4">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg sm:text-xl font-bold text-white truncate">
+                        <GradientText 
+                          enabled={userProfile?.text_gradient_enabled}
+                          className="text-lg sm:text-xl font-bold"
+                        >
+                          {userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
+                        </GradientText>
+                      </h3>
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
                         <div className="flex items-center space-x-2">
                           <Medal className="w-4 h-4 text-yellow-500" />
-                          <span className="text-yellow-500 font-semibold">{userStats.medals} medals</span>
+                          <span className="text-yellow-500 font-semibold text-sm sm:text-base">{userStats.medals} medals</span>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Coins className="w-4 h-4 text-yellow-400" />
-                          <span className="text-yellow-400 font-semibold">{userStats.coins} coins</span>
+                          <span className="text-yellow-400 font-semibold text-sm sm:text-base">{userStats.coins} coins</span>
                         </div>
                       </div>
                     </div>
@@ -447,61 +447,61 @@ export default function Friends() {
                     whileTap={{ scale: 0.95 }}
                     onClick={startQuiz}
                     disabled={userStats.hasPlayedQuiz}
-                    className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ${
+                    className={`flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 text-sm sm:text-base ${
                       userStats.hasPlayedQuiz
                         ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                         : 'bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl glow'
                     }`}
                   >
-                    <Brain className="w-5 h-5" />
+                    <Brain className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>{userStats.hasPlayedQuiz ? 'Quiz Completed' : 'Play Quiz'}</span>
                   </motion.button>
                 </div>
               </div>
 
               {/* Quiz Leaderboard */}
-              <div className="glass p-8 rounded-2xl border border-white/10 mb-8">
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Crown className="w-6 h-6 text-yellow-500 mr-2" />
+              <div className="glass p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 mb-6 sm:mb-8">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+                  <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 mr-2" />
                   Quiz Champions
                 </h2>
                 
                 {leaderboard.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-400">No players yet. Be the first to play!</p>
+                  <div className="text-center py-6 sm:py-8">
+                    <Users className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                    <p className="text-gray-400 text-sm sm:text-base">No players yet. Be the first to play!</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {leaderboard.map((player, index) => (
                       <motion.div
                         key={player.username || index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-300 ${
+                        className={`flex items-center justify-between p-3 sm:p-4 rounded-lg transition-all duration-300 ${
                           index === 0 ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30' :
                           index === 1 ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/20 border border-gray-400/30' :
                           index === 2 ? 'bg-gradient-to-r from-amber-600/20 to-amber-700/20 border border-amber-600/30' :
                           'bg-white/5 border border-white/10'
                         }`}
                       >
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white font-bold">
-                            {index === 0 ? <Crown className="w-5 h-5 text-yellow-500" /> :
-                             index === 1 ? <Medal className="w-5 h-5 text-gray-400" /> :
-                             index === 2 ? <Award className="w-5 h-5 text-amber-600" /> :
+                        <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+                          <div className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/10 text-white font-bold text-sm sm:text-base flex-shrink-0">
+                            {index === 0 ? <Crown className="w-3 h-3 sm:w-5 sm:h-5 text-yellow-500" /> :
+                             index === 1 ? <Medal className="w-3 h-3 sm:w-5 sm:h-5 text-gray-400" /> :
+                             index === 2 ? <Award className="w-3 h-3 sm:w-5 sm:h-5 text-amber-600" /> :
                              index + 1}
                           </div>
                           <Avatar
                             src={player.avatar}
                             alt={player.full_name || player.username}
-                            size={48}
+                            size={40}
                             fallbackText={player.username}
                             showBorder={false}
                           />
-                          <div>
-                            <h4 className="font-semibold">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-sm sm:text-base truncate">
                               <GradientText 
                                 enabled={player.text_gradient_enabled}
                                 className="text-white"
@@ -509,13 +509,13 @@ export default function Friends() {
                                 {player.full_name || player.username || 'Anonymous'}
                               </GradientText>
                             </h4>
-                            <p className="text-gray-400 text-sm">@{player.username}</p>
+                            <p className="text-gray-400 text-xs sm:text-sm truncate">@{player.username}</p>
                           </div>
                         </div>
                         
-                        <div className="flex items-center space-x-2">
-                          <Medal className="w-5 h-5 text-yellow-500" />
-                          <span className="text-yellow-500 font-bold text-lg">{player.medals || 0}</span>
+                        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                          <Medal className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
+                          <span className="text-yellow-500 font-bold text-base sm:text-lg">{player.medals || 0}</span>
                         </div>
                       </motion.div>
                     ))}
@@ -524,60 +524,60 @@ export default function Friends() {
               </div>
 
               {/* Coins Leaderboard */}
-              <div className="glass p-8 rounded-2xl border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center justify-between">
+              <div className="glass p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center justify-between">
                   <div className="flex items-center">
-                    <Coins className="w-6 h-6 text-yellow-400 mr-2" />
-                    Coins Collectors
+                    <Coins className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 mr-2" />
+                    <span className="text-sm sm:text-base">Coins Collectors</span>
                   </div>
                   {coinsUpdating && (
                     <motion.div
                       animate={{ opacity: [1, 0.7, 1] }}
                       transition={{ duration: 0.5, repeat: Infinity }}
-                      className="flex items-center space-x-2 text-yellow-400 text-sm"
+                      className="flex items-center space-x-2 text-yellow-400 text-xs sm:text-sm"
                     >
-                      <div className="w-3 h-3 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
                       <span>Live updating...</span>
                     </motion.div>
                   )}
                 </h2>
                 
                 {coinsLeaderboard.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Coins className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-400">No coins collected yet. Start being active to earn coins!</p>
+                  <div className="text-center py-6 sm:py-8">
+                    <Coins className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                    <p className="text-gray-400 text-sm sm:text-base">No coins collected yet. Start being active to earn coins!</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {coinsLeaderboard.map((player, index) => (
                       <motion.div
                         key={player.username || index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-300 ${
+                        className={`flex items-center justify-between p-3 sm:p-4 rounded-lg transition-all duration-300 ${
                           index === 0 ? 'bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 border border-yellow-400/30' :
                           index === 1 ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/20 border border-gray-400/30' :
                           index === 2 ? 'bg-gradient-to-r from-amber-600/20 to-amber-700/20 border border-amber-600/30' :
                           'bg-white/5 border border-white/10'
                         }`}
                       >
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white font-bold">
-                            {index === 0 ? <Crown className="w-5 h-5 text-yellow-400" /> :
-                             index === 1 ? <Medal className="w-5 h-5 text-gray-400" /> :
-                             index === 2 ? <Award className="w-5 h-5 text-amber-600" /> :
+                        <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+                          <div className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/10 text-white font-bold text-sm sm:text-base flex-shrink-0">
+                            {index === 0 ? <Crown className="w-3 h-3 sm:w-5 sm:h-5 text-yellow-400" /> :
+                             index === 1 ? <Medal className="w-3 h-3 sm:w-5 sm:h-5 text-gray-400" /> :
+                             index === 2 ? <Award className="w-3 h-3 sm:w-5 sm:h-5 text-amber-600" /> :
                              index + 1}
                           </div>
                           <Avatar
                             src={player.avatar}
                             alt={player.full_name || player.username}
-                            size={48}
+                            size={40}
                             fallbackText={player.username}
                             showBorder={false}
                           />
-                          <div>
-                            <h4 className="font-semibold">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-sm sm:text-base truncate">
                               <GradientText 
                                 enabled={player.text_gradient_enabled}
                                 className="text-white"
@@ -585,13 +585,13 @@ export default function Friends() {
                                 {player.full_name || player.username || 'Anonymous'}
                               </GradientText>
                             </h4>
-                            <p className="text-gray-400 text-sm">@{player.username}</p>
+                            <p className="text-gray-400 text-xs sm:text-sm truncate">@{player.username}</p>
                           </div>
                         </div>
                         
-                        <div className="flex items-center space-x-2">
-                          <Coins className="w-5 h-5 text-yellow-400" />
-                          <span className="text-yellow-400 font-bold text-lg">{player.coins || 0}</span>
+                        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                          <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
+                          <span className="text-yellow-400 font-bold text-base sm:text-lg">{player.coins || 0}</span>
                         </div>
                       </motion.div>
                     ))}

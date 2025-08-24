@@ -407,21 +407,80 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       console.log('Signing out user...')
+      
       // Clear profile cache when signing out
       if (user) {
         clearCachedProfile(user.id)
       }
+      
+      // Try to sign out from Supabase
       const { error } = await supabase.auth.signOut()
       
       if (error) {
-        console.error('Sign out error:', error)
+        // If it's an auth session missing error, we can ignore it
+        // as the user is already effectively signed out
+        if (error.message?.includes('Auth session missing') || error.message?.includes('AuthSessionMissingError')) {
+          console.log('Auth session already missing, proceeding with cleanup')
+        } else {
+          console.error('Sign out error:', error)
+        }
       } else {
         console.log('User signed out successfully')
       }
       
-      return { error }
+      // Force clear local state regardless of Supabase response
+      setUser(null)
+      setUserProfile(null)
+      setNeedsProfileSetup(false)
+      setIsAdmin(false)
+      
+      return { error: null }
     } catch (error) {
       console.error('Sign out failed:', error)
+      
+      // Even if there's an error, clear local state
+      setUser(null)
+      setUserProfile(null)
+      setNeedsProfileSetup(false)
+      setIsAdmin(false)
+      
+      return { error }
+    }
+  }
+
+  const forceSignOut = async () => {
+    try {
+      console.log('Force signing out user...')
+      
+      // Clear profile cache
+      if (user) {
+        clearCachedProfile(user.id)
+      }
+      
+      // Clear all Supabase session data
+      await supabase.auth.signOut({ scope: 'global' })
+      
+      // Clear local storage
+      localStorage.removeItem('supabase.auth.token')
+      sessionStorage.clear()
+      
+      // Force clear local state
+      setUser(null)
+      setUserProfile(null)
+      setNeedsProfileSetup(false)
+      setIsAdmin(false)
+      
+      console.log('Force sign out completed')
+      return { error: null }
+    } catch (error) {
+      console.error('Force sign out failed:', error)
+      
+      // Even if there's an error, clear local state
+      setUser(null)
+      setUserProfile(null)
+      setNeedsProfileSetup(false)
+      setIsAdmin(false)
+      
       return { error }
     }
   }
@@ -461,6 +520,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     signUp,
     signOut,
+    forceSignOut,
     signInWithGoogle,
     signInWithGitHub,
     completeProfileSetup,

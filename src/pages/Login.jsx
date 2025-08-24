@@ -179,18 +179,6 @@ export default function Login() {
         className="relative z-10 w-full max-w-md mx-4"
       >
                  <div className="glass p-8 rounded-2xl border border-white/10">
-           {/* Mobile Spline Robot */}
-           <div className="lg:hidden mb-6 flex justify-end pr-5">
-             <div className="relative w-64 h-48 rounded-xl overflow-hidden">
-               <iframe 
-                 src='https://my.spline.design/genkubgreetingrobot-f95PGdQ2gbUnBL9tjZWI2Mgx/' 
-                 frameborder='0' 
-                 width='100%' 
-                 height='100%'
-               />
-             </div>
-           </div>
-
            {/* Header */}
            <div className="text-center mb-8">
              <h1 className="text-3xl font-bold text-gradient mb-2">Welcome Back</h1>
