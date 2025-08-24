@@ -1,8 +1,11 @@
 import React from 'react'
 
-export default function LetterAvatar({ username, fullName, size = 'w-32 h-32', textSize = 'text-4xl' }) {
-  // Get the first letter from username or full name
+export default function LetterAvatar({ username, fullName, text, size = 'w-32 h-32', textSize = 'text-4xl' }) {
+  // Get the first letter from username, full name, or text prop
   const getInitial = () => {
+    if (text && text.trim()) {
+      return text.trim().charAt(0).toUpperCase()
+    }
     if (fullName && fullName.trim()) {
       return fullName.trim().charAt(0).toUpperCase()
     }

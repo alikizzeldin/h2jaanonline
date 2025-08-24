@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X, LogIn, LogOut, User, Home, Users, Shield, Gamepad2, Store } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import LetterAvatar from './LetterAvatar'
+import Avatar from './Avatar'
 import Logo from './Logo'
 import CoinsDisplay from './CoinsDisplay'
 import GradientText from './GradientText'
@@ -16,6 +16,16 @@ export default function Navigation() {
   const { user, signOut, loading, userProfile, isAdmin } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+
+  // Debug: Log when userProfile changes
+  useEffect(() => {
+    if (userProfile) {
+      console.log('Navigation: userProfile updated:', userProfile)
+      console.log('Navigation: text_gradient_enabled:', userProfile.text_gradient_enabled)
+      console.log('Navigation: avatar present:', !!userProfile.avatar)
+      console.log('Navigation: avatar length:', userProfile.avatar?.length || 0)
+    }
+  }, [userProfile])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -132,17 +142,18 @@ export default function Navigation() {
                         onClick={() => setUserMenuOpen(!userMenuOpen)}
                         className="flex items-center space-x-3 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-white/10"
                       >
-                        <LetterAvatar
-                          username={userProfile?.username || user.user_metadata?.user_name || user.email?.split('@')[0]}
-                          fullName={userProfile?.full_name || user.user_metadata?.full_name}
-                          size="w-8 h-8"
-                          textSize="text-sm"
+                        <Avatar
+                          src={userProfile?.avatar}
+                          alt={userProfile?.full_name || userProfile?.username || user.user_metadata?.full_name || user.user_metadata?.user_name || user.email?.split('@')[0]}
+                          size={32}
+                          fallbackText={userProfile?.username || user.user_metadata?.user_name || user.email?.split('@')[0]}
+                          showBorder={false}
                         />
                         <GradientText 
                           enabled={userProfile?.text_gradient_enabled}
                           className="text-gray-300 hover:text-white"
                         >
-                          {userProfile?.full_name || user.user_metadata?.full_name || userProfile?.username || user.user_metadata?.user_name || user.email?.split('@')[0]}
+                          {userProfile?.username || user.user_metadata?.user_name || userProfile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0]}
                         </GradientText>
                       </motion.button>
 

@@ -78,16 +78,9 @@ export default function Shop() {
         return
       }
 
-      // Clear the cache and let AuthContext refetch fresh data
-      clearProfileCache(user.id)
-      
+      // Realtime will automatically update all components
       setPurchaseSuccess(true)
       
-      // Refresh coins display
-      window.dispatchEvent(new CustomEvent('coinsAwarded', { 
-        detail: { userId: user.id, amount: -item.price, newTotal: coins - item.price } 
-      }))
-
       setTimeout(() => {
         setPurchaseSuccess(false)
       }, 3000)

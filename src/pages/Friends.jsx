@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import LetterAvatar from '../components/LetterAvatar'
+import Avatar from '../components/Avatar'
 import GradientText from '../components/GradientText'
 import { 
   Trophy, 
@@ -134,46 +134,42 @@ export default function Friends() {
           
           // Update current user's profile if it's their change
           if (payload.new && payload.new.id === user.id) {
-            setUserProfile(payload.new)
+            // Preserve existing avatar data if not included in the update
+            setUserProfile(prevProfile => {
+              const updatedProfile = { ...payload.new }
+              
+              // Only preserve avatar if the update doesn't explicitly set it to null
+              // This allows avatar removal to work properly
+              if (updatedProfile.avatar === undefined && prevProfile?.avatar) {
+                updatedProfile.avatar = prevProfile.avatar
+                console.log('Friends: Preserving existing avatar data')
+              } else if (updatedProfile.avatar === null) {
+                console.log('Friends: Avatar explicitly set to null (removed)')
+              }
+              
+              return updatedProfile
+            })
+            
             setUserStats({
               medals: payload.new.medals || 0,
               hasPlayedQuiz: payload.new.has_played_quiz || false,
               coins: payload.new.coins || 0
             })
+            
+            // Show updating animation for coins changes
+            if (payload.new.coins !== undefined) {
+              setCoinsUpdating(true)
+              setTimeout(() => {
+                setCoinsUpdating(false)
+              }, 1000)
+            }
           }
         }
       )
       .subscribe()
 
-    // Listen for coins awarded events to update leaderboard immediately
-    const handleCoinsAwarded = (event) => {
-      const { userId, amount, newTotal } = event.detail
-      
-      // Update user stats if it's the current user
-      if (userId === user.id) {
-        setUserStats(prev => ({
-          ...prev,
-          coins: newTotal
-        }))
-      }
-      
-      // Show updating animation
-      setCoinsUpdating(true)
-      
-      // Refresh coins leaderboard immediately
-      fetchCoinsLeaderboard()
-      
-      // Hide updating animation after a short delay
-      setTimeout(() => {
-        setCoinsUpdating(false)
-      }, 1000)
-    }
-
-    window.addEventListener('coinsAwarded', handleCoinsAwarded)
-
     return () => {
       subscription.unsubscribe()
-      window.removeEventListener('coinsAwarded', handleCoinsAwarded)
     }
   }, [user])
 
@@ -183,7 +179,7 @@ export default function Friends() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, full_name')
+        .select('username, full_name, avatar, text_gradient_enabled')
         .eq('id', user.id)
         .single()
 
@@ -198,7 +194,9 @@ export default function Friends() {
         // Fallback to user metadata if no profile exists
         setUserProfile({
           username: user.user_metadata?.user_name || user.email?.split('@')[0] || '',
-          full_name: user.user_metadata?.full_name || ''
+          full_name: user.user_metadata?.full_name || '',
+          avatar: null,
+          text_gradient_enabled: false
         })
       }
     } catch (error) {
@@ -206,7 +204,9 @@ export default function Friends() {
       // Fallback to user metadata
       setUserProfile({
         username: user.user_metadata?.user_name || user.email?.split('@')[0] || '',
-        full_name: user.user_metadata?.full_name || ''
+        full_name: user.user_metadata?.full_name || '',
+        avatar: null,
+        text_gradient_enabled: false
       })
     }
   }
@@ -215,7 +215,7 @@ export default function Friends() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, full_name, medals, text_gradient_enabled')
+        .select('username, full_name, medals, text_gradient_enabled, avatar')
         .order('medals', { ascending: false })
         .limit(10)
 
@@ -231,7 +231,7 @@ export default function Friends() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, full_name, coins, text_gradient_enabled')
+        .select('username, full_name, coins, text_gradient_enabled, avatar')
         .order('coins', { ascending: false })
         .limit(10)
 
@@ -413,11 +413,12 @@ export default function Friends() {
               <div className="glass p-6 rounded-2xl border border-white/10 mb-8">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <LetterAvatar
-                      username={userProfile?.username || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
-                      fullName={userProfile?.full_name || user?.user_metadata?.full_name}
-                      size="w-16 h-16"
-                      textSize="text-xl"
+                    <Avatar
+                      src={userProfile?.avatar}
+                      alt={userProfile?.full_name || userProfile?.username || user?.user_metadata?.full_name || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
+                      size={64}
+                      fallbackText={userProfile?.username || user?.user_metadata?.user_name || user?.email?.split('@')[0]}
+                      showBorder={true}
                     />
                     <div>
                                               <h3 className="text-xl font-bold text-white">
@@ -492,11 +493,12 @@ export default function Friends() {
                              index === 2 ? <Award className="w-5 h-5 text-amber-600" /> :
                              index + 1}
                           </div>
-                          <LetterAvatar
-                            username={player.username}
-                            fullName={player.full_name}
-                            size="w-12 h-12"
-                            textSize="text-lg"
+                          <Avatar
+                            src={player.avatar}
+                            alt={player.full_name || player.username}
+                            size={48}
+                            fallbackText={player.username}
+                            showBorder={false}
                           />
                           <div>
                             <h4 className="font-semibold">
@@ -567,11 +569,12 @@ export default function Friends() {
                              index === 2 ? <Award className="w-5 h-5 text-amber-600" /> :
                              index + 1}
                           </div>
-                          <LetterAvatar
-                            username={player.username}
-                            fullName={player.full_name}
-                            size="w-12 h-12"
-                            textSize="text-lg"
+                          <Avatar
+                            src={player.avatar}
+                            alt={player.full_name || player.username}
+                            size={48}
+                            fallbackText={player.username}
+                            showBorder={false}
                           />
                           <div>
                             <h4 className="font-semibold">

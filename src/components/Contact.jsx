@@ -61,7 +61,7 @@ export default function Contact() {
         throw error
       }
 
-      setSuccess('Message sent successfully!')
+      setSuccess('Message sent successfully! Ali will receive it instantly!')
       setSenderName('')
       setMessage('')
       setIsAnonymous(false)

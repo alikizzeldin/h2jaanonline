@@ -34,6 +34,34 @@ export const CoinsProvider = ({ children }) => {
     }
   }, [user])
 
+  // Listen for real-time coins changes
+  useEffect(() => {
+    if (!user) return
+
+    const coinsSubscription = supabase
+      .channel('coins_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'profiles',
+          filter: `id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('CoinsContext: Profile change detected:', payload)
+          if (payload.new && payload.new.coins !== undefined) {
+            console.log('Updating coins from realtime:', payload.new.coins)
+            setCoins(payload.new.coins)
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      coinsSubscription.unsubscribe()
+    }
+  }, [user])
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {

@@ -4,7 +4,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LetterAvatar from '../components/LetterAvatar'
+import AvatarUpload from '../components/AvatarUpload'
+import Avatar from '../components/Avatar'
 import GradientText from '../components/GradientText'
+import GradientDebug from '../components/GradientDebug'
 import { 
   User, 
   Mail, 
@@ -18,7 +21,8 @@ import {
   LogOut,
   Shield,
   Palette,
-  Sparkles
+  Sparkles,
+  Camera
 } from 'lucide-react'
 
 export default function Profile() {
@@ -32,6 +36,7 @@ export default function Profile() {
     location: '',
     website: '',
     company: '',
+    avatar: null,
     text_gradient_enabled: false,
     text_gradient_purchased: false
   })
@@ -51,6 +56,48 @@ export default function Profile() {
       fetchProfile()
     }
   }, [user, loading, navigate])
+
+  // Listen for real-time profile changes (only needed if realtime is disabled)
+  useEffect(() => {
+    if (!user) return
+
+    const subscription = supabase
+      .channel('profile_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'profiles',
+          filter: `id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Profile change detected:', payload)
+          if (payload.new) {
+            // Update profile with new data
+            setProfile(prevProfile => {
+              const updatedProfile = { ...payload.new }
+              
+              // Only preserve avatar if the update doesn't explicitly set it to null
+              // This allows avatar removal to work properly
+              if (updatedProfile.avatar === undefined && prevProfile?.avatar) {
+                updatedProfile.avatar = prevProfile.avatar
+                console.log('Profile: Preserving existing avatar data')
+              } else if (updatedProfile.avatar === null) {
+                console.log('Profile: Avatar explicitly set to null (removed)')
+              }
+              
+              return updatedProfile
+            })
+            // Realtime will automatically update AuthContext
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [user])
 
   const fetchProfile = async () => {
     try {
@@ -76,6 +123,7 @@ export default function Profile() {
           location: '',
           website: '',
           company: '',
+          avatar: null,
           text_gradient_enabled: false,
           text_gradient_purchased: false
         }
@@ -122,6 +170,45 @@ export default function Profile() {
     }))
   }
 
+  const handleAvatarChange = async (avatarData) => {
+    // Update local state immediately for UI responsiveness
+    setProfile(prev => ({
+      ...prev,
+      avatar: avatarData
+    }))
+
+    // Save to database immediately
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          avatar: avatarData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id)
+
+      if (error) {
+        console.error('Error updating avatar:', error)
+        // Revert the state if there was an error
+        setProfile(prev => ({
+          ...prev,
+          avatar: avatarData === null ? null : prev.avatar // Keep old avatar if update failed
+        }))
+        setError('Failed to update avatar')
+        return
+      }
+
+      // Show success message for avatar removal
+      if (avatarData === null) {
+        setSuccess('Avatar removed successfully!')
+        setTimeout(() => setSuccess(''), 3000)
+      }
+    } catch (error) {
+      console.error('Error updating avatar:', error)
+      setError('Failed to update avatar')
+    }
+  }
+
   const handleGradientToggle = async () => {
     try {
       const newGradientState = !profile.text_gradient_enabled
@@ -132,10 +219,11 @@ export default function Profile() {
         text_gradient_enabled: newGradientState
       }))
 
-      // Update the database (only the enabled state, not the purchased state)
+      // Update the database while preserving all existing data
       const { error } = await supabase
         .from('profiles')
         .update({ 
+          ...profile, // Preserve all existing profile data
           text_gradient_enabled: newGradientState,
           updated_at: new Date().toISOString()
         })
@@ -152,9 +240,7 @@ export default function Profile() {
         return
       }
 
-      // Clear the profile cache to force a refresh
-      clearProfileCache(user.id)
-      
+      // Realtime will automatically update AuthContext and navigation
       setSuccess(`Gradient effect ${newGradientState ? 'enabled' : 'disabled'} successfully!`)
       setTimeout(() => setSuccess(''), 3000)
     } catch (error) {
@@ -288,12 +374,36 @@ export default function Profile() {
           <div className="glass p-8 rounded-2xl border border-white/10">
             {/* Avatar Section */}
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 mb-8">
-              <LetterAvatar
-                username={profile.username}
-                fullName={profile.full_name}
-                size="w-32 h-32"
-                textSize="text-4xl"
-              />
+              <div className="flex flex-col items-center space-y-4">
+                {isEditing ? (
+                  <AvatarUpload
+                    currentAvatar={profile.avatar}
+                    onAvatarChange={handleAvatarChange}
+                    size={128}
+                    className="mb-4"
+                  />
+                ) : (
+                                      <Avatar
+                      src={profile.avatar}
+                      alt={profile.full_name || profile.username}
+                      size={128}
+                      fallbackText={profile.username || profile.full_name}
+                      showBorder={true}
+                      className="mb-4"
+                    />
+                )}
+                
+                {isEditing && (
+                  <div className="text-center">
+                    <p className="text-sm text-gray-400 mb-2">
+                      Click to upload or drag an image
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Max 5MB • JPG, PNG, GIF
+                    </p>
+                  </div>
+                )}
+              </div>
 
               <div className="flex-1 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start space-x-2 mb-2">
@@ -602,6 +712,9 @@ export default function Profile() {
           </div>
         </motion.div>
       </div>
+      
+      {/* Debug Component */}
+      <GradientDebug />
     </div>
   )
 }

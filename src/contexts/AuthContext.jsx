@@ -227,6 +227,51 @@ export const AuthProvider = ({ children }) => {
     }
   }, [hasInitialized])
 
+  // Listen for real-time profile changes
+  useEffect(() => {
+    if (!user) return
+
+    const profileSubscription = supabase
+      .channel('auth_profile_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'profiles',
+          filter: `id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('AuthContext: Profile change detected:', payload)
+          if (payload.new) {
+            console.log('AuthContext: Updating profile with new data:', payload.new)
+            
+            // Update profile with new data
+            setUserProfile(prevProfile => {
+              const updatedProfile = { ...payload.new }
+              
+              // Only preserve avatar if the update doesn't explicitly set it to null
+              // This allows avatar removal to work properly
+              if (updatedProfile.avatar === undefined && prevProfile?.avatar) {
+                updatedProfile.avatar = prevProfile.avatar
+                console.log('AuthContext: Preserving existing avatar data')
+              } else if (updatedProfile.avatar === null) {
+                console.log('AuthContext: Avatar explicitly set to null (removed)')
+              }
+              
+              // Update the cached profile data
+              setCachedProfile(user.id, updatedProfile)
+              return updatedProfile
+            })
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      profileSubscription.unsubscribe()
+    }
+  }, [user])
+
   const ensureProfileExists = async (user) => {
     if (!user) return
     
@@ -235,14 +280,14 @@ export const AuthProvider = ({ children }) => {
       
       // First, try to get profile from cache
       const cachedProfile = getCachedProfile(user.id)
-      if (cachedProfile && cachedProfile.hasOwnProperty('text_gradient_enabled') && cachedProfile.hasOwnProperty('text_gradient_purchased')) {
+      if (cachedProfile && cachedProfile.hasOwnProperty('text_gradient_enabled') && cachedProfile.hasOwnProperty('text_gradient_purchased') && cachedProfile.hasOwnProperty('avatar')) {
         console.log('Using cached profile:', cachedProfile)
         setUserProfile(cachedProfile)
         const needsSetup = !cachedProfile.username || cachedProfile.username.trim() === ''
         setNeedsProfileSetup(needsSetup)
         return
       } else if (cachedProfile) {
-        console.log('Cached profile missing gradient fields, clearing cache and refetching')
+        console.log('Cached profile missing required fields, clearing cache and refetching')
         clearCachedProfile(user.id)
       }
       
@@ -257,7 +302,7 @@ export const AuthProvider = ({ children }) => {
       // Check if profile exists with timeout
       const profilePromise = supabase
         .from('profiles')
-        .select('id, username, full_name, text_gradient_enabled, text_gradient_purchased')
+        .select('id, username, full_name, text_gradient_enabled, text_gradient_purchased, avatar')
         .eq('id', user.id)
         .single()
 
@@ -285,6 +330,7 @@ export const AuthProvider = ({ children }) => {
             has_played_quiz: false,
             text_gradient_enabled: false,
             text_gradient_purchased: false,
+            avatar: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           })
@@ -302,7 +348,8 @@ export const AuthProvider = ({ children }) => {
             full_name: user.user_metadata?.full_name || 
                       user.user_metadata?.name || '',
             text_gradient_enabled: false,
-            text_gradient_purchased: false
+            text_gradient_purchased: false,
+            avatar: null
           }
           setCachedProfile(user.id, newProfile)
           setUserProfile(newProfile)

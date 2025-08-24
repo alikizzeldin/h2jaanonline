@@ -218,7 +218,7 @@ export default function Hero() {
               className="flex justify-center lg:justify-start items-center space-x-4 mb-12"
             >
               <motion.a
-                href="https://github.com"
+                href="https://github.com/alikizzeldin"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
@@ -229,7 +229,7 @@ export default function Hero() {
               </motion.a>
               
               <motion.a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/ali-izzeldin/"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
