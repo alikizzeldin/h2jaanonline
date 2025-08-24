@@ -115,7 +115,7 @@ export default function Navigation() {
     ...(user ? [{ name: 'Games', path: '/games', icon: Gamepad2 }] : []),
     ...(user ? [{ name: 'Friends', path: '/friends', icon: Users }] : []),
     ...(user ? [{ name: 'Shop', path: '/shop', icon: Store }] : []),
-    ...(user ? [{ name: 'Profile', path: '/profile', icon: User, isProfile: true }] : []),
+    ...(user ? [{ name: 'Profile', path: '/profile', icon: User, isProfile: true }] : [{ name: 'Login', path: '/login', icon: LogIn }]),
   ]
 
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false)
